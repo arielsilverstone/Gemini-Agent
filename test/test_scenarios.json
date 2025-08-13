@@ -1,0 +1,254 @@
+[
+  {
+    "id": "rest_health_minimal",
+    "name": "REST Health - Minimal Mode",
+    "category": "connectivity",
+    "type": "rest_health_test",
+    "enabled": true,
+    "priority": 1,
+    "timeout": 20,
+    "retry_count": 2
+  },
+  {
+    "id": "rest_health_retry",
+    "name": "REST Health - Retry Emphasis",
+    "category": "connectivity",
+    "type": "rest_health_test",
+    "enabled": true,
+    "priority": 1,
+    "timeout": 15,
+    "retry_count": 3
+  },
+  {
+    "id": "ws_connectivity_minimal_01",
+    "name": "WebSocket Connectivity - Minimal Mode 01",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 1,
+    "timeout": 30,
+    "retry_count": 2
+  },
+  {
+    "id": "ws_connectivity_minimal_02",
+    "name": "WebSocket Connectivity - Minimal Mode 02",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 1,
+    "timeout": 30,
+    "retry_count": 2
+  },
+  {
+    "id": "agent_codegen_quick",
+    "name": "Agent Execution - Codegen Quick",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate hello world script",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 90,
+    "retry_count": 1
+  },
+  {
+    "id": "rest_health_full",
+    "name": "REST Health - Full Mode",
+    "category": "connectivity",
+    "type": "rest_health_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 30,
+    "retry_count": 2
+  },
+  {
+    "id": "rest_health_slow",
+    "name": "REST Health - Slow Startup Allowance",
+    "category": "connectivity",
+    "type": "rest_health_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 45,
+    "retry_count": 2
+  },
+  {
+    "id": "rule_engine_min_length",
+    "name": "Rule Engine - Min Length Violation",
+    "category": "rule_engine",
+    "type": "rule_engine_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 60,
+    "retry_count": 1
+  },
+  {
+    "id": "rule_engine_retry_bias",
+    "name": "Rule Engine - Retry Bias",
+    "category": "rule_engine",
+    "type": "rule_engine_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 65,
+    "retry_count": 2
+  },
+  {
+    "id": "ws_invalid_message_error",
+    "name": "WebSocket Invalid Message Error Path",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 30,
+    "retry_count": 2
+  },
+  {
+    "id": "ws_ping_pong_full",
+    "name": "WebSocket Ping/Pong - Full Mode",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 45,
+    "retry_count": 2
+  },
+  {
+    "id": "ws_sequential_duo",
+    "name": "WebSocket Sequential Connections x2",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 60,
+    "retry_count": 1
+  },
+  {
+    "id": "ws_start_workflow_message",
+    "name": "WebSocket Start Workflow Message",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 2,
+    "timeout": 45,
+    "retry_count": 2
+  },
+  {
+    "id": "agent_codegen_medium",
+    "name": "Agent Execution - Codegen Medium Task",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate a CLI that parses two integers and prints their sum",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 150,
+    "retry_count": 1
+  },
+  {
+    "id": "agent_codegen_small",
+    "name": "Agent Execution - Codegen Small Task",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate a simple function to add two numbers",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 120,
+    "retry_count": 1
+  },
+  {
+    "id": "rule_engine_no_violation",
+    "name": "Rule Engine - No Violation (Long Output)",
+    "category": "rule_engine",
+    "type": "rule_engine_test",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 60,
+    "retry_count": 1
+  },
+  {
+    "id": "rule_engine_stress",
+    "name": "Rule Engine - Stress Multiple Checks",
+    "category": "rule_engine",
+    "type": "rule_engine_test",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 75,
+    "retry_count": 1
+  },
+  {
+    "id": "ws_parallel_duo",
+    "name": "WebSocket Parallel Connections x2",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 60,
+    "retry_count": 1
+  },
+  {
+    "id": "ws_reconnect",
+    "name": "WebSocket Reconnect",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 3,
+    "timeout": 60,
+    "retry_count": 2
+  },
+  {
+    "id": "agent_codegen_long",
+    "name": "Agent Execution - Codegen Longer Task",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate a small module with two functions and unit tests",
+    "enabled": true,
+    "priority": 4,
+    "timeout": 180,
+    "retry_count": 1
+  },
+  {
+    "id": "agent_codegen_error_handling",
+    "name": "Agent Execution - Error Handling",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate code that intentionally raises and catches an exception",
+    "enabled": true,
+    "priority": 4,
+    "timeout": 150,
+    "retry_count": 1
+  },
+  {
+    "id": "agent_codegen_io",
+    "name": "Agent Execution - File IO",
+    "category": "agent_execution",
+    "type": "agent_test",
+    "agent_name": "codegen_agent",
+    "task": "Generate code that writes and reads a file named out.txt",
+    "enabled": true,
+    "priority": 4,
+    "timeout": 160,
+    "retry_count": 1
+  },
+  {
+    "id": "rule_engine_edge_cases",
+    "name": "Rule Engine - Edge Cases",
+    "category": "rule_engine",
+    "type": "rule_engine_test",
+    "enabled": true,
+    "priority": 4,
+    "timeout": 80,
+    "retry_count": 1
+  },
+  {
+    "id": "ws_spam_messages",
+    "name": "WebSocket Spam Messages",
+    "category": "connectivity",
+    "type": "websocket_test",
+    "enabled": true,
+    "priority": 4,
+    "timeout": 75,
+    "retry_count": 1
+  }
+]
