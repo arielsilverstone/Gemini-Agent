@@ -1,0 +1,20 @@
+# ============================================================================
+#   File:    workflows.yaml
+#   Purpose: Defines a workflow to test agent rules
+# ============================================================================
+
+codegen_forbidden_import_test:
+  description: "A workflow to test the CodeGenAgent's forbidden import rule."
+  start_step: generate_code
+  steps:
+    generate_code:
+      agent: codegen_agent
+      input_template: "{initial_task}"
+      output_variable: "generated_code"
+      context:
+        language: "python"
+        output_filename: "list_files.py"
+        parent_folder_id: "1BDn0ewazMsSxAgDGVz2WmjAvgIc-2pWj"
+#
+#
+## End of Script

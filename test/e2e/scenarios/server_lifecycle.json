@@ -1,0 +1,21 @@
+{
+  "id": "server_lifecycle",
+  "name": "Server lifecycle endpoints",
+  "category": "api",
+  "enabled": false,
+  "priority": 3,
+  "timeout": "45 seconds",
+  "description": "POST /start and POST /stop succeed",
+  "actions": [
+    "start backend",
+    "POST to /start",
+    "POST to /stop"
+  ],
+  "Pass": [
+    "200"
+  ],
+  "Fail": [
+    "5xx",
+    "timeout"
+  ]
+}

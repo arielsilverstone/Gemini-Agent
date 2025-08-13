@@ -1,0 +1,19 @@
+{
+  "id": "ws_connectivity",
+  "name": "WebSocket connectivity and welcome handshake",
+  "category": "connectivity",
+  "enabled": false,
+  "priority": 1,
+  "timeout": "30 seconds",
+  "description": "Connect to ws://localhost:{port}/ws and expect initial status connected",
+  "actions": [
+    "start backend",
+    "connect websocket"
+  ],
+  "Pass": [
+    "connected"
+  ],
+  "Fail": [
+    "error"
+  ]
+}

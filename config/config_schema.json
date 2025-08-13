@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gemini-Agent App Settings",
+  "type": "object",
+  "properties": {
+    "last_opened_project_path": {"type": "string"},
+    "asset_locations": {
+      "type": "object",
+      "properties": {
+        "project_files": {"type": "string"},
+        "external_tools": {"type": "string"},
+        "agent_configs": {"type": "string"},
+        "code_templates": {"type": "string"}
+      },
+      "required": ["project_files", "external_tools", "agent_configs", "code_templates"]
+    },
+    "gdrive": {
+      "type": "object",
+      "properties": {
+        "client_id": {"type": "string"},
+        "client_secret": {"type": "string"},
+        "refresh_token": {"type": "string"},
+        "root_folder_id": {"type": "string"}
+      },
+      "required": ["client_id", "client_secret", "refresh_token", "root_folder_id"]
+    },
+    "default_llm": {"type": "string"},
+    "llm_configurations": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "is_connected": {"type": "boolean"},
+            "selected_model": {"type": "string"},
+            "api_key": {"type": "string"},
+            "endpoint": {"type": "string"}
+          },
+          "required": ["is_connected", "selected_model"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["last_opened_project_path", "asset_locations", "gdrive", "default_llm", "llm_configurations"]
+}

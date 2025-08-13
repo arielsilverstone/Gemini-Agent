@@ -1,0 +1,21 @@
+{
+  "id": "ws_error_resilience",
+  "name": "WebSocket echo/error resilience",
+  "category": "websocket",
+  "enabled": false,
+  "priority": 2,
+  "timeout": "45 seconds",
+  "description": "Send invalid JSON and unknown command; expect handled error responses without crash",
+  "actions": [
+    "start backend",
+    "connect websocket"
+  ],
+  "Pass": [
+    "error handled",
+    "no crash"
+  ],
+  "Fail": [
+    "unhandled exception",
+    "connection dropped"
+  ]
+}

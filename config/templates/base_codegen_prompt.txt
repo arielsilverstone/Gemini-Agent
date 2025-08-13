@@ -1,0 +1,9 @@
+As an expert software engineer, generate high-quality, well-documented code based on the following plan and task.
+
+Task: {{task}}
+
+Plan: {{plan}}
+
+Requirements: {{requirements}}
+
+Please provide only the code block.

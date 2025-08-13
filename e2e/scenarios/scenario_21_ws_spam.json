@@ -1,0 +1,10 @@
+{
+  "id": "ws_spam_messages",
+  "name": "WebSocket Spam Messages",
+  "category": "connectivity",
+  "type": "websocket_test",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 75,
+  "retry_count": 1
+}

@@ -1,0 +1,20 @@
+{
+  "id": "concurrency_isolation",
+  "name": "Concurrency and isolation",
+  "category": "concurrency",
+  "enabled": false,
+  "priority": 5,
+  "timeout": "90 seconds",
+  "description": "Run scenarios in parallel across workers; ensure no port conflicts and clean shutdown",
+  "actions": [
+    "start backend"
+  ],
+  "Pass": [
+    "no port conflict",
+    "clean shutdown"
+  ],
+  "Fail": [
+    "port conflict",
+    "leaked process"
+  ]
+}

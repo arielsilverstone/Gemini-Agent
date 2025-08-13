@@ -1,0 +1,36 @@
+{
+    "9bb11f034bc6ea2c936c7df332fbfc1b81484e2353d719b611b2bc184bb98768": {
+        "user_id": "admin",
+        "permissions": [
+            "*"
+        ],
+        "security_level": "CONFIDENTIAL",
+        "created_at": "2025-08-07T07:14:12.273272+00:00",
+        "last_used": null,
+        "usage_count": 0,
+        "is_active": true
+    },
+    "de37b4965e8b68abb579c06ae24075db8e57e728030384f5ec0e29acf3b6b27e": {
+        "user_id": "user",
+        "permissions": [
+            "api:read",
+            "workflow:execute"
+        ],
+        "security_level": "INTERNAL",
+        "created_at": "2025-08-07T07:14:12.273786+00:00",
+        "last_used": null,
+        "usage_count": 0,
+        "is_active": true
+    },
+    "997d94eab1988d66219852b43017fa5c066cc3ba3d31b29607051bd26f9120f2": {
+        "user_id": "test_user",
+        "permissions": [
+            "api:read_status"
+        ],
+        "security_level": "INTERNAL",
+        "created_at": "2025-08-07T07:14:12.274219+00:00",
+        "last_used": "2025-08-07T07:18:03.695047+00:00",
+        "usage_count": 1,
+        "is_active": true
+    }
+}

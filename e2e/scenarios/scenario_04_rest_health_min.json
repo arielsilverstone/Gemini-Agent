@@ -1,0 +1,10 @@
+{
+  "id": "rest_health_minimal",
+  "name": "REST Health - Minimal Mode",
+  "category": "connectivity",
+  "type": "rest_health_test",
+  "enabled": true,
+  "priority": 1,
+  "timeout": 20,
+  "retry_count": 2
+}

@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "gemini-agent"
+version = "1.0.3"
+description = "Portable AI-powered code development environment (backend)"
+authors = ["Ariel <Ariel@home.local>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+anthropic = "^0.29.0"
+fastapi = "^0.110.0"
+google-api-python-client = ">=2.80.0"
+google-auth-oauthlib = ">=0.7.0"
+google-generativeai = "^0.7.0"
+jsonschema = "^4.25.0"
+loguru = "^0.7.2"
+Pillow = "^10.0.1"
+psutil = "^5.9.8"
+python = ">=3.13,<4.0"
+python-dotenv = "^1.1.1"
+pydantic = "^2.11.7"
+pydantic-core = "^2.37.2"
+PyYAML = "^6.0.1"
+requests = "^2.31.0"
+uvicorn = "^0.29.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

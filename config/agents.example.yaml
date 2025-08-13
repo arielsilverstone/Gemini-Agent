@@ -1,0 +1,47 @@
+# Gemini-Agent AI Agents Configuration Example
+# Place as agents.yaml and edit as needed
+
+agents:
+  - name: CodeGenAgent
+    module: agents.codegen_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - strict_templates: true
+      - language: python, powershell, javascript, typescript
+  - name: QAAgent
+    module: agents.qa_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - semantic_drift_check: true
+      - anchor_check: true
+  - name: TestAgent
+    module: agents.test_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - unit_tests: true
+      - integration_tests: true
+      - gui_tests: true
+  - name: FixAgent
+    module: agents.fix_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - auto_fix: true
+      - refactor: true
+  - name: PlannerAgent
+    module: agents.planner_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - project_planning: true
+      - checkpointing: true
+  - name: DocAgent
+    module: agents.doc_agent
+    enabled: true
+    llm: gemini
+    rules:
+      - output_formats: [markdown, txt]
+      - adherence_to_code_comments: true

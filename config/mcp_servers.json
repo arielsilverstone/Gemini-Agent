@@ -1,0 +1,16 @@
+{
+  "servers": [
+    {
+      "name": "default_mcp",
+      "endpoint": "http://localhost:9006",
+      "llm_provider": "openai",
+      "api_key": "YOUR_OPENAI_API_KEY"
+    },
+    {
+      "name": "gemini_mcp",
+      "endpoint": "http://localhost:9007",
+      "llm_provider": "google_gemini",
+      "api_key": "YOUR_GOOGLE_API_KEY"
+    }
+  ]
+}

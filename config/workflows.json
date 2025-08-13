@@ -1,0 +1,44 @@
+{
+     "test_codegen_rule_workflow": {
+     "name": "Test Codegen Rule Workflow",
+     "start_step": "generate_os_code",
+     "steps": {
+          "generate_os_code": {
+          "agent": "codegen_agent",
+          "input_template": "Write a Python script that lists the files in the current directory.",
+          "description": "A step designed to trigger the 'import os' rule.",
+          "outputs": {
+          "on_success": "end",
+          "on_error": "end"
+          }
+          }
+     }
+     },
+     "available_steps": [
+     {
+          "step": "plan",
+          "agent": "planner",
+          "description": "Generate project plan and checkpoints"
+     },
+     {
+          "step": "codegen",
+          "agent": "codegen",
+          "description": "Generate codebase or code snippet"
+     },
+     {
+          "step": "test",
+          "agent": "test",
+          "description": "Generate and run tests (unit/integration/GUI)"
+     },
+     {
+          "step": "qa",
+          "agent": "qa",
+          "description": "QA/verify code and context, check for semantic drift"
+     },
+     {
+          "step": "fix",
+          "agent": "fix",
+          "description": "Apply fixes, refactor, optimize code"
+     }
+     ]
+ }

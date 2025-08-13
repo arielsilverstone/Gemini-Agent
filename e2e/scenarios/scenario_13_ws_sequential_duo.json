@@ -1,0 +1,10 @@
+{
+  "id": "ws_sequential_duo",
+  "name": "WebSocket Sequential Connections x2",
+  "category": "connectivity",
+  "type": "websocket_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 60,
+  "retry_count": 1
+}

@@ -1,0 +1,113 @@
+# ============================================================================
+# File: rules.example.yaml
+# Purpose: Simple examples of rule system for Gemini-Agent
+# Usage: Copy and modify these basic examples to create your own rules
+# ============================================================================
+
+global_rules:
+  - id: "GL001"
+    rule_name: "file-header-check"
+    description: "Enforce standard file header comments"
+    type: "content_check"
+    pattern: "^# ============================================================================"
+    action: "flag"
+    severity: "low"
+    message: "File does not contain the standard header."
+    llm_guidance:
+      primary: "Add a proper file header with creation date and purpose"
+      examples:
+        - "# ============================================================================\n# File: example.py\n# Purpose: Brief description\n# ============================================================================"
+
+  - id: "GL002"
+    rule_name: "output-minimum-length"
+    description: "Ensure outputs are sufficiently detailed"
+    type: "output_structure_check"
+    min_length: 50
+    action: "retry_with_constraint"
+    severity: "medium"
+    message: "Output too brief, needs more detail"
+    llm_guidance:
+      primary: "Expand the response with more detailed explanations and examples"
+      examples:
+        - "Add implementation details and reasoning"
+        - "Include usage examples and best practices"
+
+agent_rules:
+  - agent_name: "codegen_agent"
+    rules:
+      - id: "CG001"
+        rule_name: "function-docstring-required"
+        description: "All functions must have docstrings"
+        type: "code_quality_check"
+        pattern: "def\\s+\\w+\\([^)]*\\):\\s*\\n\\s*\"\"\"[^\"]*\"\"\""
+        action: "template_override"
+        severity: "medium"
+        message: "Functions missing docstrings. Using enhanced template."
+        template_override: "docstring_enforced_template"
+        llm_guidance:
+          primary: "Add comprehensive docstrings to all function definitions"
+          examples:
+            - "def example():\n    \"\"\"Brief description.\n    \n    Returns:\n        type: Description\n    \"\"\""
+
+  - agent_name: "qa_agent"
+    rules:
+      - id: "QA001"
+        rule_name: "analysis-completeness"
+        description: "QA reports must include required sections"
+        type: "output_structure_check"
+        required_sections: ["Summary", "Issues Found", "Recommendations"]
+        action: "update"
+        severity: "high"
+        message: "QA report missing required sections."
+        llm_guidance:
+          primary: "Include all required sections in your QA analysis"
+          examples:
+            - "Add a summary section with key findings"
+            - "Include specific recommendations for each issue"
+
+  - agent_name: "test_agent"
+    rules:
+      - id: "TS001"
+        rule_name: "test-coverage-basic"
+        description: "Tests must cover main functionality"
+        type: "code_quality_check"
+        min_coverage: 60
+        action: "retest"
+        severity: "medium"
+        message: "Insufficient test coverage. Adding more tests."
+        llm_guidance:
+          primary: "Generate additional tests to cover main code paths"
+          examples:
+            - "Add tests for error conditions"
+            - "Include boundary value testing"
+
+# ============================================================================
+# Template Configuration (Basic Examples)
+# ============================================================================
+template_inheritance:
+  base_templates:
+    - "base_codegen_template"
+    - "base_qa_template"
+    - "base_test_template"
+
+  override_templates:
+    - "docstring_enforced_template"
+    - "comprehensive_qa_template"
+
+# ============================================================================
+# Rule Processing Configuration
+# ============================================================================
+rule_processing:
+  max_retries: 3
+  auto_fix_enabled: true
+
+  action_priorities:
+    template_override: 1
+    retry_with_constraint: 2
+    update: 3
+    flag: 4
+
+  severity_handling:
+    high: "immediate_action"
+    medium: "next_iteration"
+    low: "background_processing"

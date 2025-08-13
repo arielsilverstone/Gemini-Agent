@@ -1,0 +1,21 @@
+{
+  "id": "rest_health",
+  "name": "REST health endpoint availability",
+  "category": "api",
+  "enabled": false,
+  "priority": 1,
+  "timeout": "20 seconds",
+  "description": "GET /health returns 200 and status ok",
+  "actions": [
+    "start backend",
+    "GET /health"
+  ],
+  "Pass": [
+    "200",
+    "ok"
+  ],
+  "Fail": [
+    "5xx",
+    "timeout"
+  ]
+}

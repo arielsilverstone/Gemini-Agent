@@ -1,0 +1,52 @@
+{
+  "llm_configurations": {
+    "codegen_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.2,
+      "max_output_tokens": 8192,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "codegen_template"
+    },
+    "doc_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.3,
+      "max_output_tokens": 4096,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "doc_template"
+    },
+    "fix_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.1,
+      "max_output_tokens": 8192,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "fix_template"
+    },
+    "planner_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.5,
+      "max_output_tokens": 2048,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "planner_template"
+    },
+    "qa_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.5,
+      "max_output_tokens": 2048,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "qa_template"
+    },
+    "test_agent": {
+      "model_name": "gemini-1.5-pro-latest",
+      "temperature": 0.2,
+      "max_output_tokens": 4096,
+      "top_p": 0.95,
+      "top_k": 40,
+      "prompt_template": "test_template"
+    }
+  }
+}

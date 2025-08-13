@@ -1,0 +1,33 @@
+<!-- ============================================================================
+     File: index.html
+     Version: 1.00
+     Purpose: Electron/Bun/React UI entry for Gemini-Agent
+     Created: 28JUL25
+============================================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>Gemini-Agent</title>
+    <!-- Tailwind CSS CDN (for dev, replace with local in prod) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Streaming UI base elements for multi-agent output -->
+    <div class="p-4">
+        <div class="mb-2">
+            <input id="workflowNameInput" type="text" placeholder="Workflow name" class="border p-1 mr-2" style="width:180px;">
+            <input id="initialTaskInput" type="text" placeholder="Initial task" class="border p-1 mr-2" style="width:360px;">
+            <button id="startWorkflowButton" class="bg-blue-600 text-white px-3 py-1 rounded">Start Workflow</button>
+        </div>
+        <div id="orchestratorStatus" class="text-xs text-gray-700 mb-1" style="min-height:18px;"></div>
+        <div id="errorDisplayArea" class="text-xs text-red-600 mb-1" style="min-height:18px;"></div>
+        <div id="outputContainer" class="bg-white border rounded p-2" style="min-height:200px;"></div>
+    </div>
+    <!-- Banner: React root element for Gemini-Agent UI -->
+    <div id="root" class="w-full h-screen flex flex-col"></div>
+    <script src="/frontend/renderer.js"></script>
+    <script src="/frontend/streaming_ui.js"></script>
+</body>
+</html>

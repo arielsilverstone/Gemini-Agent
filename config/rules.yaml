@@ -1,0 +1,501 @@
+# ============================================================================
+# File: rules.yaml
+# Purpose: Comprehensive rule system for Gemini-Agent
+# Supports: A (simple replacement), C (dynamic modifications), D (inheritance chains)
+# ============================================================================
+
+global_rules:
+  - id: "GL001"
+    rule_name: "file-header-check"
+    description: "Enforce standard file header comments"
+    type: "content_check"
+    pattern: "^# ============================================================================"
+    action: "template_override"
+    severity: "low"
+    message: "File missing standard header. Adding template with proper header."
+    template_override: "header_enforced_template"
+    llm_guidance:
+      primary: "Add a proper file header with creation date and purpose"
+      examples:
+        - "# ============================================================================\n# File: example.py\n# Purpose: Brief description\n# ============================================================================"
+      variations:
+        - "Include file header at the top of all generated files"
+        - "Ensure proper commenting structure with creation metadata"
+
+  - id: "GL002"
+    rule_name: "no-profanity"
+    description: "Prevent profanity in all outputs"
+    type: "content_check"
+    keywords_to_avoid: ["damn", "hell", "crap", "stupid", "idiot"]
+    action: "refix"
+    severity: "medium"
+    message: "Output contains inappropriate language"
+    llm_guidance:
+      primary: "Replace inappropriate language with professional alternatives"
+      examples:
+        - "Instead of 'stupid error' use 'configuration issue'"
+        - "Replace 'damn bug' with 'persistent issue'"
+      variations:
+        - "Use professional, technical language only"
+        - "Maintain respectful tone in all communications"
+
+  - id: "GL003"
+    rule_name: "output-length-check"
+    description: "Ensure outputs meet minimum content requirements"
+    type: "output_structure_check"
+    min_length: 50
+    action: "retry_with_constraint"
+    severity: "medium"
+    message: "Output too brief, needs more detail"
+    llm_guidance:
+      primary: "Expand the response with more detailed explanations and examples"
+      examples:
+        - "Add implementation details and reasoning"
+        - "Include usage examples and best practices"
+      variations:
+        - "Provide comprehensive coverage of the topic"
+        - "Include relevant context and background information"
+
+agent_rules:
+  # ============================================================================
+  # CODEGEN AGENT RULES
+  # ============================================================================
+  - agent_name: "codegen_agent"
+    rules:
+      - id: "CG001"
+        rule_name: "forbidden-import-os"
+        description: "Prevent direct os module imports for security"
+        type: "regex"
+        pattern: "import\\s+os"
+        action: "reject"
+        severity: "high"
+        message: "Direct os import forbidden for security. Use pathlib or subprocess instead."
+        llm_guidance:
+          primary: "Replace 'import os' with safer alternatives like pathlib.Path or subprocess"
+          examples:
+            - "os.path.join() → pathlib.Path() / 'file'"
+            - "os.system() → subprocess.run()"
+          variations:
+            - "Use pathlib for file operations instead of os.path"
+            - "Replace os.system calls with subprocess for security"
+
+      - id: "CG002"
+        rule_name: "function-docstring-required"
+        description: "All functions must have docstrings"
+        type: "code_quality_check"
+        pattern: "def\\s+\\w+\\([^)]*\\):\\s*\\n\\s*\"\"\"[^\"]*\"\"\""
+        action: "template_override"
+        severity: "medium"
+        message: "Functions missing docstrings. Using enhanced template."
+        template_override: "docstring_enforced_template"
+        llm_guidance:
+          primary: "Add comprehensive docstrings to all function definitions"
+          examples:
+            - "def example():\n    \"\"\"Brief description.\n    \n    Returns:\n        type: Description\n    \"\"\""
+          variations:
+            - "Include parameter descriptions and return types in docstrings"
+            - "Add usage examples in function documentation"
+
+      - id: "CG003"
+        rule_name: "security-template-enforcement"
+        description: "Apply security-focused template for sensitive operations"
+        type: "content_check"
+        keywords_to_detect: ["password", "token", "secret", "key", "credential"]
+        action: "template_override"
+        severity: "high"
+        message: "Security-sensitive content detected. Applying secure coding template."
+        template_modifications:
+          - add_before: "**Instructions:**"
+            content: "SECURITY CRITICAL: Handle all secrets securely. Never log credentials."
+          - replace: "{task}"
+            with: "SECURE IMPLEMENTATION: {task} (with proper secret handling)"
+          - add_after: "```python"
+            content: "# SECURITY: All credentials must be properly masked\n"
+        llm_guidance:
+          primary: "Implement secure handling for any sensitive data or credentials"
+          examples:
+            - "Use environment variables for secrets, never hardcode"
+            - "Mask sensitive data in logs and error messages"
+          variations:
+            - "Apply principle of least privilege for credential access"
+            - "Implement proper input validation for security-critical functions"
+
+      - id: "CG004"
+        rule_name: "code-formatting-standard"
+        description: "Enforce PEP 8 formatting standards"
+        type: "formatting_check"
+        checks: ["line_length", "indentation", "naming_convention"]
+        action: "autofix"
+        severity: "low"
+        message: "Code formatting issues detected. Auto-formatting applied."
+        llm_guidance:
+          primary: "Follow PEP 8 standards for Python code formatting"
+          examples:
+            - "Line length max 79 characters"
+            - "Use snake_case for variables and functions"
+          variations:
+            - "Ensure consistent indentation (4 spaces)"
+            - "Follow naming conventions for classes and constants"
+
+  # ============================================================================
+  # QA AGENT RULES
+  # ============================================================================
+  - agent_name: "qa_agent"
+    rules:
+      - id: "QA001"
+        rule_name: "comprehensive-analysis-required"
+        description: "QA reports must include all required sections"
+        type: "output_structure_check"
+        required_sections: ["Summary", "Issues Found", "Recommendations", "Risk Assessment"]
+        action: "template_override"
+        severity: "high"
+        message: "QA report missing required sections. Using comprehensive template."
+        template_chain: ["base_qa_template", "risk_assessment_layer", "recommendations_layer"]
+        llm_guidance:
+          primary: "Generate comprehensive QA analysis with all required sections"
+          examples:
+            - "Include executive summary, detailed findings, and actionable recommendations"
+          variations:
+            - "Provide risk assessment with severity levels for each issue"
+            - "Include specific remediation steps for identified problems"
+
+      - id: "QA002"
+        rule_name: "security-vulnerability-detection"
+        description: "Must identify potential security vulnerabilities"
+        type: "security_check"
+        vulnerability_patterns: ["sql_injection", "xss", "path_traversal", "hardcoded_secrets"]
+        action: "re-qa"
+        severity: "high"
+        message: "Security analysis insufficient. Re-analyzing with security focus."
+        template_modifications:
+          - add_before: "**Analysis Instructions:**"
+            content: "PRIORITY: Identify security vulnerabilities including injection attacks, authentication issues, and data exposure risks."
+        llm_guidance:
+          primary: "Perform thorough security analysis checking for common vulnerabilities"
+          examples:
+            - "Check for SQL injection, XSS, CSRF protection"
+            - "Verify input validation and output encoding"
+          variations:
+            - "Review authentication and authorization mechanisms"
+            - "Analyze data handling for privacy compliance"
+
+      - id: "QA003"
+        rule_name: "code-quality-metrics"
+        description: "Include quantitative quality metrics in analysis"
+        type: "code_quality_check"
+        required_metrics: ["complexity", "coverage", "maintainability"]
+        action: "update"
+        severity: "medium"
+        message: "QA analysis missing quality metrics. Updating with quantitative analysis."
+        llm_guidance:
+          primary: "Include measurable code quality metrics in your analysis"
+          examples:
+            - "Cyclomatic complexity scores for functions"
+            - "Code coverage percentages for tests"
+          variations:
+            - "Assess maintainability index and technical debt"
+            - "Provide readability and documentation quality scores"
+
+  # ============================================================================
+  # TEST AGENT RULES
+  # ============================================================================
+  - agent_name: "test_agent"
+    rules:
+      - id: "TS001"
+        rule_name: "test-coverage-requirement"
+        description: "Tests must achieve minimum coverage targets"
+        type: "code_quality_check"
+        min_coverage: 80
+        coverage_types: ["line", "branch", "function"]
+        action: "gen_test_plan"
+        severity: "high"
+        message: "Insufficient test coverage. Generating comprehensive test plan."
+        template_override: "comprehensive_test_template"
+        llm_guidance:
+          primary: "Generate additional tests to achieve 80% coverage across all metrics"
+          examples:
+            - "Add edge case tests for boundary conditions"
+            - "Include negative test cases for error handling"
+          variations:
+            - "Create integration tests for component interactions"
+            - "Add performance tests for critical functions"
+
+      - id: "TS002"
+        rule_name: "test-types-completeness"
+        description: "Must include unit, integration, and system tests"
+        type: "output_structure_check"
+        required_test_types: ["unit", "integration", "system", "performance"]
+        action: "regen"
+        severity: "medium"
+        message: "Missing test types. Regenerating with complete test suite."
+        template_modifications:
+          - add_before: "**Test Generation Instructions:**"
+            content: "REQUIREMENT: Generate unit tests, integration tests, system tests, and performance tests."
+          - replace: "{test_framework}"
+            with: "{test_framework} with comprehensive test type coverage"
+        llm_guidance:
+          primary: "Create a complete test suite covering all test types and scenarios"
+          examples:
+            - "Unit tests for individual functions"
+            - "Integration tests for component communication"
+          variations:
+            - "System tests for end-to-end workflows"
+            - "Performance tests for bottleneck identification"
+
+      - id: "TS003"
+        rule_name: "test-data-validation"
+        description: "Test data must be realistic and comprehensive"
+        type: "content_check"
+        test_data_requirements: ["edge_cases", "invalid_inputs", "boundary_values"]
+        action: "re-re-test"
+        severity: "medium"
+        message: "Test data insufficient. Regenerating with comprehensive test data."
+        llm_guidance:
+          primary: "Include realistic test data covering edge cases and boundary conditions"
+          examples:
+            - "Test with empty strings, null values, and maximum lengths"
+            - "Include both valid and invalid input scenarios"
+          variations:
+            - "Use representative production-like test data"
+            - "Test error conditions and exception handling"
+
+  # ============================================================================
+  # FIX AGENT RULES
+  # ============================================================================
+  - agent_name: "fix_agent"
+    rules:
+      - id: "FX001"
+        rule_name: "fix-verification-required"
+        description: "All fixes must include verification steps"
+        type: "output_structure_check"
+        required_sections: ["Problem Analysis", "Solution", "Verification Steps", "Testing"]
+        action: "fix-verify"
+        severity: "high"
+        message: "Fix missing verification. Adding verification requirements."
+        template_chain: ["base_fix_template", "verification_layer", "testing_layer"]
+        llm_guidance:
+          primary: "Include comprehensive verification steps for all fixes"
+          examples:
+            - "Describe how to verify the fix works correctly"
+            - "Include test cases that validate the solution"
+          variations:
+            - "Provide step-by-step verification procedures"
+            - "Include rollback plans if fix causes issues"
+
+      - id: "FX002"
+        rule_name: "code-formatting-fix"
+        description: "Apply consistent formatting to all fixed code"
+        type: "formatting_check"
+        formatting_standards: ["pep8", "line_length", "indentation", "naming"]
+        action: "autofix"
+        severity: "low"
+        message: "Applying formatting fixes to code."
+        llm_guidance:
+          primary: "Ensure all fixed code follows formatting standards"
+          examples:
+            - "Apply PEP 8 formatting to Python code"
+            - "Ensure consistent indentation and naming"
+          variations:
+            - "Fix line length and spacing issues"
+            - "Apply language-specific formatting conventions"
+
+      - id: "FX003"
+        rule_name: "refactor-opportunity-detection"
+        description: "Identify and suggest refactoring opportunities"
+        type: "code_quality_check"
+        refactor_patterns: ["duplicate_code", "long_functions", "complex_conditions"]
+        action: "refix"
+        severity: "medium"
+        message: "Refactoring opportunities detected. Enhancing fix with refactoring."
+        template_modifications:
+          - add_after: "**Solution:**"
+            content: "\n**Refactoring Opportunities:**\n- Analyze code for duplication and complexity\n- Suggest improvements for maintainability\n"
+        llm_guidance:
+          primary: "Identify refactoring opportunities while fixing code issues"
+          examples:
+            - "Extract common code into reusable functions"
+            - "Simplify complex conditional logic"
+          variations:
+            - "Break down large functions into smaller components"
+            - "Improve variable naming and code organization"
+
+  # ============================================================================
+  # DOC AGENT RULES
+  # ============================================================================
+  - agent_name: "doc_agent"
+    rules:
+      - id: "DC001"
+        rule_name: "documentation-completeness"
+        description: "Documentation must cover all required sections"
+        type: "output_structure_check"
+        required_sections: ["Overview", "Installation", "Usage", "API Reference", "Examples"]
+        action: "doc"
+        severity: "high"
+        message: "Documentation incomplete. Regenerating with all required sections."
+        template_override: "comprehensive_docs_template"
+        llm_guidance:
+          primary: "Create complete documentation covering all aspects of the code"
+          examples:
+            - "Include installation instructions and prerequisites"
+            - "Provide usage examples and API documentation"
+          variations:
+            - "Add troubleshooting and FAQ sections"
+            - "Include code examples and best practices"
+
+      - id: "DC002"
+        rule_name: "api-documentation-detail"
+        description: "API documentation must include parameters and return values"
+        type: "documentation_check"
+        api_requirements: ["parameters", "return_values", "exceptions", "examples"]
+        action: "update"
+        severity: "medium"
+        message: "API documentation lacking detail. Updating with comprehensive information."
+        template_modifications:
+          - add_before: "**API Documentation:**"
+            content: "REQUIREMENT: Document all parameters, return values, exceptions, and provide usage examples."
+        llm_guidance:
+          primary: "Provide detailed API documentation with complete parameter information"
+          examples:
+            - "Document parameter types, default values, and constraints"
+            - "Include return value types and possible exceptions"
+          variations:
+            - "Add usage examples for each API function"
+            - "Include links to related functions and concepts"
+
+      - id: "DC003"
+        rule_name: "template-adherence"
+        description: "Documentation must follow organization template standards"
+        type: "template_adherence"
+        template_requirements: ["consistent_formatting", "standard_sections", "proper_linking"]
+        action: "template_override"
+        severity: "low"
+        message: "Documentation format inconsistent. Applying standard template."
+        template_chain: ["base_doc_template", "formatting_layer", "navigation_layer"]
+        llm_guidance:
+          primary: "Follow organizational documentation standards and formatting"
+          examples:
+            - "Use consistent heading styles and section organization"
+            - "Include proper cross-references and navigation"
+          variations:
+            - "Apply standard formatting for code blocks and examples"
+            - "Ensure consistent terminology and style throughout"
+
+  # ============================================================================
+  # PLANNER AGENT RULES
+  # ============================================================================
+  - agent_name: "planner_agent"
+    rules:
+      - id: "PL001"
+        rule_name: "plan-structure-completeness"
+        description: "Plans must include all strategic components"
+        type: "output_structure_check"
+        required_sections: ["Objectives", "Scope", "Timeline", "Resources", "Risks", "Deliverables"]
+        action: "replan"
+        severity: "high"
+        message: "Plan missing critical sections. Regenerating comprehensive plan."
+        template_override: "strategic_planning_template"
+        llm_guidance:
+          primary: "Create comprehensive plans with all strategic planning components"
+          examples:
+            - "Define clear objectives with measurable outcomes"
+            - "Include detailed timeline with milestones"
+          variations:
+            - "Identify resource requirements and constraints"
+            - "Assess risks and mitigation strategies"
+
+      - id: "PL002"
+        rule_name: "timeline-realism"
+        description: "Project timelines must be realistic and achievable"
+        type: "content_check"
+        timeline_validation: ["task_dependencies", "resource_availability", "complexity_assessment"]
+        action: "plan"
+        severity: "medium"
+        message: "Timeline appears unrealistic. Regenerating with proper estimation."
+        template_modifications:
+          - add_before: "**Timeline Planning:**"
+            content: "CRITICAL: Ensure realistic time estimates based on task complexity and dependencies."
+          - replace: "{timeline}"
+            with: "{timeline} (validated for realism and dependencies)"
+        llm_guidance:
+          primary: "Create realistic timelines considering task complexity and dependencies"
+          examples:
+            - "Account for integration time between components"
+            - "Include buffer time for testing and debugging"
+          variations:
+            - "Consider team expertise and learning curves"
+            - "Plan for parallel vs sequential task execution"
+
+      - id: "PL003"
+        rule_name: "risk-assessment-depth"
+        description: "Risk assessment must identify and quantify project risks"
+        type: "content_check"
+        risk_categories: ["technical", "resource", "timeline", "external"]
+        action: "update"
+        severity: "high"
+        message: "Risk assessment insufficient. Updating with comprehensive risk analysis."
+        llm_guidance:
+          primary: "Conduct thorough risk assessment across all project dimensions"
+          examples:
+            - "Identify technical risks and mitigation strategies"
+            - "Assess resource availability and backup plans"
+          variations:
+            - "Evaluate external dependencies and their risks"
+            - "Quantify risk impact and probability levels"
+
+# ============================================================================
+# TEMPLATE DEFINITIONS
+# ============================================================================
+template_inheritance:
+  base_templates:
+    - "base_codegen_template"
+    - "base_qa_template"
+    - "base_test_template"
+    - "base_fix_template"
+    - "base_doc_template"
+    - "base_planner_template"
+
+  override_templates:
+    - "docstring_enforced_template"
+    - "security_focused_template"
+    - "comprehensive_test_template"
+    - "strategic_planning_template"
+    - "comprehensive_docs_template"
+    - "header_enforced_template"
+
+  template_layers:
+    - "security_layer"
+    - "verification_layer"
+    - "testing_layer"
+    - "risk_assessment_layer"
+    - "recommendations_layer"
+    - "formatting_layer"
+    - "navigation_layer"
+
+# ============================================================================
+# RULE PROCESSING CONFIGURATION
+# ============================================================================
+rule_processing:
+  max_retries: 3
+  retry_delay: 2
+  escalation_threshold: 2
+  auto_fix_enabled: true
+  template_cache_enabled: true
+
+  action_priorities:
+    reject: 1
+    template_override: 2
+    retry_with_constraint: 3
+    autofix: 4
+    refix: 5
+    re-qa: 6
+    update: 7
+    flag: 8
+
+  severity_handling:
+    high: "immediate_action"
+    medium: "next_iteration"
+    low: "background_processing"
+
+#
+#
+## End of File

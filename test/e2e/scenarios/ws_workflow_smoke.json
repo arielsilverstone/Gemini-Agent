@@ -1,0 +1,20 @@
+{
+  "id": "ws_workflow_smoke",
+  "name": "Workflow kick-off via WebSocket (smoke)",
+  "category": "workflow",
+  "enabled": false,
+  "priority": 4,
+  "timeout": "60 seconds",
+  "description": "Send execute_workflow payload; expect handled start or handled error without crash",
+  "actions": [
+    "start backend",
+    "connect websocket"
+  ],
+  "Pass": [
+    "handled"
+  ],
+  "Fail": [
+    "unhandled exception",
+    "crash"
+  ]
+}

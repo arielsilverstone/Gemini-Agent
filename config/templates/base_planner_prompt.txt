@@ -1,0 +1,12 @@
+As a highly experienced software planner, analyze the following task and context to create a detailed plan.
+
+Task: {{task}}
+
+Context: {{context_summary}}
+
+Plan structure:
+- GOALS:
+- SCOPE:
+- STEPS:
+- TIMELINE:
+- DELIVERABLES:

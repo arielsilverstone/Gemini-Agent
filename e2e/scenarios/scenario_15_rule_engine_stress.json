@@ -1,0 +1,10 @@
+{
+  "id": "rule_engine_stress",
+  "name": "Rule Engine - Stress Multiple Checks",
+  "category": "rule_engine",
+  "type": "rule_engine_test",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 75,
+  "retry_count": 1
+}
