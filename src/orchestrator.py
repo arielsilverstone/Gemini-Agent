@@ -116,7 +116,7 @@ class Orchestrator:
     async def _execute_task(self, agent: AgentBase, task: str) -> AsyncGenerator[str, None]:
         """Executes a single agent task and yields its output chunks."""
         try:
-            run_result = await agent.run(task, self.context)
+            run_result = agent.run(task, self.context)
             run_result = cast(AsyncIterator[str], run_result)
             async for chunk in run_result:
                 yield str(chunk)
@@ -140,7 +140,7 @@ class Orchestrator:
 
         logging.info(f"Executing IPC task for agent '{agent_type}': {task}")
         try:
-            run_result = await agent.run(task, self.context)
+            run_result = agent.run(task, self.context)
             run_result = cast(AsyncIterator[str], run_result)
             output_chunks = []
             async for chunk in run_result:

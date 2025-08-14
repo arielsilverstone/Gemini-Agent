@@ -1,0 +1,4 @@
+{
+  "include": ["src", "agents"],
+  "exclude": ["test", "utils", "src/backend_server.py"]
+}

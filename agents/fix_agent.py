@@ -35,11 +35,9 @@ class FixAgent(AgentBase):
         )
 
     @record_telemetry("FixAgent", "run")
-    async def run(self, task: str, context: dict) -> AsyncIterator[str]:
-        """
-        Executes the code fixing task by buffering the response, validating it,
-        and then streaming it and saving the file if successful.
-        """
+    async def run(self, task: str, context: Optional[Dict[str, Any]] = None) -> AsyncIterator[str]:
+        """Execute the code fixing task and yield output chunks."""
+        context = context or {}
         self.update_context(context)
         log_message = f"[{self.name}] Starting code fixing task: {task}"
         logging.info(log_message)

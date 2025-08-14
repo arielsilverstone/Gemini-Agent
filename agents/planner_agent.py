@@ -24,11 +24,9 @@ class PlannerAgent(AgentBase):
         super().__init__(name, config, websocket_manager, rule_engine, config_manager)
 
     @record_telemetry("PlannerAgent", "run")
-    async def run(self, task: str, context: dict) -> AsyncIterator[str]:
-        """
-        Executes the planning task by buffering the response, validating it,
-        and then streaming it and saving the file if successful.
-        """
+    async def run(self, task: str, context: Optional[Dict[str, Any]] = None) -> AsyncIterator[str]:
+        """Execute the planning task and yield output chunks."""
+        context = context or {}
         self.update_context(context)
         log_message = f"[{self.name}] Starting planning task: {task}"
         logging.info(log_message)
