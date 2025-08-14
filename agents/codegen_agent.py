@@ -27,11 +27,9 @@ class CodeGenAgent(AgentBase):
         super().__init__(name, config, websocket_manager, rule_engine, config_manager)
 
     @record_telemetry("CodeGenAgent", "run")
-    async def run(self, task: str, context: dict) -> AsyncIterator[str]:
-        """
-        Executes the code generation task by buffering the response, validating it,
-        and then streaming it if successful. Triggers self-correction on failure.
-        """
+    async def run(self, task: str, context: Optional[Dict[str, Any]] = None) -> AsyncIterator[str]:
+        """Execute the code generation task and yield output chunks."""
+        context = context or {}
         self.update_context(context)
         log_message = f"[{self.name}] Starting code generation task: {task}"
         logging.info(log_message)

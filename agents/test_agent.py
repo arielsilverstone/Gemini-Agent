@@ -47,8 +47,9 @@ class TestAgent(AgentBase):
     # ========================================================================
     #
     @record_telemetry("TestAgent", "run")
-    async def run(self, task: str, context: dict) -> AsyncIterator[str]:
+    async def run(self, task: str, context: Optional[Dict[str, Any]] = None) -> AsyncIterator[str]:
 
+        context = context or {}
         self.update_context(context)
         operation_type = context.get("operation_type", "generate_tests")
         if self.websocket_manager:

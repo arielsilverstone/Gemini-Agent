@@ -745,6 +745,8 @@ class AgentBase(ABC):
              Implementations should use _execute_llm_workflow_with_rules() for
              executing the agent's logic with rule enforcement.
         """
+        if False:
+            yield ""  # pragma: no cover
         raise NotImplementedError("Subclasses must implement this method")
 
     async def _enforce_agent_rules(

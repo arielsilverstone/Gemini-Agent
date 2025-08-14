@@ -7,12 +7,15 @@
 # SECTION 1: Global Variables
 # ============================================================================
 #
+import asyncio
+import inspect
 import time
 import csv
 import json
 import os
 import psutil
 from datetime import datetime
+from typing import Callable, ParamSpec, TypeVar
 
 TELEMETRY_CSV = os.path.join('logs', 'telemetry.csv')
 if not os.path.exists('logs'):
@@ -26,10 +29,44 @@ if not os.path.exists('logs'):
 #          actions.
 # ============================================================================
 #
-def record_telemetry(agent, action):
+P = ParamSpec("P")
+T = TypeVar("T")
 
-    def decorator(func):
-        def wrapper(*args, **kwargs):
+def record_telemetry(agent: str, action: str) -> Callable[[Callable[P, T]], Callable[P, T]]:
+
+    def decorator(func: Callable[P, T]) -> Callable[P, T]:
+        if asyncio.iscoroutinefunction(func):
+
+            async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+                start = time.time()
+                process = psutil.Process(os.getpid())
+                mem_before = process.memory_info().rss
+                cpu_before = process.cpu_percent(interval=None)
+                result = func(*args, **kwargs)
+                if inspect.isawaitable(result):
+                    result_val = await result  # type: ignore[assignment]
+                else:
+                    result_val = result
+                elapsed = time.time() - start
+                mem_after = process.memory_info().rss
+                cpu_after = process.cpu_percent(interval=None)
+                row = {
+                    'datetime': datetime.now().isoformat(),
+                    'agent': agent,
+                    'action': action,
+                    'elapsed_sec': round(elapsed, 3),
+                    'mem_mb': round((mem_after - mem_before) / 1048576, 3),
+                    'cpu_pct': cpu_after - cpu_before
+                }
+                with open(TELEMETRY_CSV, 'a', newline='') as f:
+                    writer = csv.DictWriter(f, fieldnames=row.keys())
+                    if f.tell() == 0:
+                        writer.writeheader()
+                    writer.writerow(row)
+                return result_val
+            return async_wrapper  # type: ignore[misc]
+
+        def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             start = time.time()
             process = psutil.Process(os.getpid())
             mem_before = process.memory_info().rss
@@ -52,7 +89,8 @@ def record_telemetry(agent, action):
                     writer.writeheader()
                 writer.writerow(row)
             return result
-        return wrapper
+        return sync_wrapper
+
     return decorator
 #
 # ============================================================================
