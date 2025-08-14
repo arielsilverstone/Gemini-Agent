@@ -1,0 +1,10 @@
+{
+  "id": "ws_start_workflow_message",
+  "name": "WebSocket Start Workflow Message",
+  "category": "connectivity",
+  "type": "websocket_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 45,
+  "retry_count": 2
+}

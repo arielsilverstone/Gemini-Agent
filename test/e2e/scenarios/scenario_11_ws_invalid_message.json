@@ -1,0 +1,10 @@
+{
+  "id": "ws_invalid_message_error",
+  "name": "WebSocket Invalid Message Error Path",
+  "category": "connectivity",
+  "type": "websocket_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 30,
+  "retry_count": 2
+}

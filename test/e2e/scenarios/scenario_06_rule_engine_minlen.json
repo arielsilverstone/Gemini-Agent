@@ -1,0 +1,10 @@
+{
+  "id": "rule_engine_min_length",
+  "name": "Rule Engine - Min Length Violation",
+  "category": "rule_engine",
+  "type": "rule_engine_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 60,
+  "retry_count": 1
+}

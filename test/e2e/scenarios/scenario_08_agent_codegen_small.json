@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_small",
+  "name": "Agent Execution - Codegen Small Task",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate a simple function to add two numbers",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 120,
+  "retry_count": 1
+}

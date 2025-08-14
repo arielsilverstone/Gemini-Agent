@@ -1,0 +1,10 @@
+{
+  "id": "rest_health_retry",
+  "name": "REST Health - Retry Emphasis",
+  "category": "connectivity",
+  "type": "rest_health_test",
+  "enabled": true,
+  "priority": 1,
+  "timeout": 15,
+  "retry_count": 3
+}

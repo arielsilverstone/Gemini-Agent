@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from enum import Enum
 import yaml
 from loguru import logger
+import asyncio
 #
 # ============================================================================
 # SECTION 2: Data Classes and Enums
@@ -95,7 +96,7 @@ class ProcessingResult:
     final_template: Optional[str] = None
     should_retry: bool = False
     retry_prompt: Optional[str] = None
-    processing_errors: List[str] = None
+    processing_errors: Optional[List[str]] = None
 #
 # ============================================================================
 # Class 2.6: RuleEngine
@@ -378,9 +379,9 @@ class RuleEngine:
         elif rule_type == "formatting_check":
             return self._check_formatting_rule(output, rule)
         elif rule_type == "documentation_check":
-            return self._check_documentation_rule(output, rule)
+            return self.check_documentation_rule(output, rule)
         elif rule_type == "template_adherence":
-            return self._check_template_adherence_rule(output, rule)
+            return self.check_template_adherence_rule(output, rule)
         else:
             logger.warning(f"Unknown rule type: {rule_type}")
             return False, ""

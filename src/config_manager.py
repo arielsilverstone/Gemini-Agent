@@ -12,7 +12,11 @@ import os
 import json
 import yaml
 import threading
+import asyncio
+from typing import Any, Dict, Optional, Union, AsyncIterator, Type
+from pathlib import Path
 from pydantic import BaseModel, ValidationError
+from dataclasses import dataclass
 
 # --- PATH CORRECTION ---
 # Build an absolute path to the project root to reliably find the config file.
@@ -220,12 +224,275 @@ class ConfigManager:
                except Exception as e:
                     print(f"[ERROR] Failed to save settings: {e}")
                     return False
-"""
-╔══════════════════════════════════════════════════════════════════════════════╗
-║ Section 4: Singleton Instance Creation                                       ║
-║ Purpose:   Ensures only one instance of ConfigManager exists                 ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-"""
+# Section 4: Async Configuration Manager
+# Purpose: Async configuration management with streaming and validation
+
+@dataclass
+class ConfigValidationResult:
+    """Result of configuration validation with streaming support."""
+    is_valid: bool
+    errors: list[str]
+    warnings: list[str]
+    config_data: Optional[Dict[str, Any]] = None
+    validation_time: float = 0.0
+
+class AsyncConfigManager:
+    """Async configuration manager with streaming capabilities."""
+    
+    def __init__(self):
+        self.config_path = CONFIG_PATH
+        self.agents_config_path = AGENTS_CONFIG_PATH
+        self.workflows_path = WORKFLOWS_PATH
+        self._settings = None
+        self._workflows = {}
+        self._config_lock = asyncio.Lock()
+        self._cache_lock = threading.RLock()
+        self._config_cache = {}
+        self._validation_cache = {}
+    
+    async def load_config_streaming(self, config_path: Union[str, Path]) -> AsyncIterator[ConfigValidationResult]:
+        """
+        Load configuration with streaming validation results.
+        
+        Args:
+            config_path: Path to configuration file
+            
+        Yields:
+            ConfigValidationResult: Streaming validation results
+        """
+        config_path = Path(config_path)
+        start_time = asyncio.get_event_loop().time()
+        
+        try:
+            # Initial validation result
+            yield ConfigValidationResult(
+                is_valid=True,
+                errors=[],
+                warnings=[],
+                validation_time=0.0
+            )
+            
+            if not config_path.exists():
+                error_result = ConfigValidationResult(
+                    is_valid=False,
+                    errors=[f"Configuration file not found: {config_path}"],
+                    warnings=[],
+                    validation_time=asyncio.get_event_loop().time() - start_time
+                )
+                yield error_result
+                return
+            
+            # Load configuration based on file extension
+            if config_path.suffix.lower() == '.json':
+                async with self._config_lock:
+                    with open(config_path, 'r', encoding='utf-8') as f:
+                        config_data = json.load(f)
+            elif config_path.suffix.lower() in ['.yml', '.yaml']:
+                async with self._config_lock:
+                    with open(config_path, 'r', encoding='utf-8') as f:
+                        config_data = yaml.safe_load(f)
+            else:
+                error_result = ConfigValidationResult(
+                    is_valid=False,
+                    errors=[f"Unsupported configuration format: {config_path.suffix}"],
+                    warnings=[],
+                    validation_time=asyncio.get_event_loop().time() - start_time
+                )
+                yield error_result
+                return
+            
+            # Validate configuration
+            validation_result = await self._validate_config_async(config_data)
+            validation_result.config_data = config_data
+            validation_result.validation_time = asyncio.get_event_loop().time() - start_time
+            
+            # Cache validation result
+            async with self._config_lock:
+                self._validation_cache[str(config_path)] = validation_result
+            
+            yield validation_result
+            
+        except Exception as e:
+            error_result = ConfigValidationResult(
+                is_valid=False,
+                errors=[f"Error loading configuration: {str(e)}"],
+                warnings=[],
+                validation_time=asyncio.get_event_loop().time() - start_time
+            )
+            yield error_result
+    
+    async def _validate_config_async(self, config_data: Dict[str, Any]) -> ConfigValidationResult:
+        """Async configuration validation with type casting."""
+        errors = []
+        warnings = []
+        
+        try:
+            # Validate required fields
+            required_fields = ['last_opened_project_path', 'asset_locations']
+            for field in required_fields:
+                if field not in config_data:
+                    errors.append(f"Missing required field: {field}")
+            
+            # Validate gdrive configuration
+            if 'gdrive' in config_data:
+                gdrive_config = config_data['gdrive']
+                if not isinstance(gdrive_config, dict):
+                    errors.append("gdrive must be a dictionary")
+                else:
+                    # Type casting for gdrive config
+                    for key, value in gdrive_config.items():
+                        cast_value = self.cast_config_value(value, str)
+                        if cast_value is None and key in ['client_id', 'client_secret']:
+                            warnings.append(f"Empty {key} in gdrive configuration")
+                        gdrive_config[key] = cast_value
+            
+            # Validate LLM configurations
+            if 'llm_configurations' in config_data:
+                llm_configs = config_data['llm_configurations']
+                if not isinstance(llm_configs, dict):
+                    errors.append("llm_configurations must be a dictionary")
+                else:
+                    for llm_name, llm_config in llm_configs.items():
+                        if not isinstance(llm_config, dict):
+                            errors.append(f"LLM configuration for {llm_name} must be a dictionary")
+                        else:
+                            # Type casting for LLM config
+                            for key, value in llm_config.items():
+                                if key in ['temperature', 'max_tokens']:
+                                    cast_value = self.cast_config_value(value, float)
+                                    llm_config[key] = cast_value
+            
+            return ConfigValidationResult(
+                is_valid=len(errors) == 0,
+                errors=errors,
+                warnings=warnings
+            )
+            
+        except Exception as e:
+            return ConfigValidationResult(
+                is_valid=False,
+                errors=[f"Validation error: {str(e)}"],
+                warnings=warnings
+            )
+    
+    def cast_config_value(self, value: Any, target_type: Type) -> Any:
+        """
+        Type-safe configuration value casting.
+        
+        Args:
+            value: Value to cast
+            target_type: Target type for casting
+            
+        Returns:
+            Casted value or None if casting fails
+        """
+        try:
+            if target_type is str:
+                return str(value)
+            elif target_type is int:
+                return int(value)
+            elif target_type is float:
+                return float(value)
+            elif target_type is bool:
+                if isinstance(value, str):
+                    return value.lower() in ('true', '1', 'yes', 'on')
+                return bool(value)
+            elif isinstance(target_type, tuple):
+                # Handle union types
+                for t in target_type:
+                    try:
+                        return t(value)
+                    except (ValueError, TypeError):
+                        continue
+                return None
+            else:
+                return value
+        except (ValueError, TypeError):
+            return None
+    
+    async def get_config_async(self, config_path: Optional[Union[str, Path]] = None) -> Optional[Dict[str, Any]]:
+        """
+        Get configuration with async caching.
+        
+        Args:
+            config_path: Optional custom config path
+            
+        Returns:
+            Configuration dictionary or None if not found
+        """
+        if config_path is None:
+            config_path = self.config_path
+        
+        config_path = Path(config_path)
+        cache_key = str(config_path)
+        
+        # Check cache first
+        async with self._config_lock:
+            if cache_key in self._config_cache:
+                return self._config_cache[cache_key]
+        
+        # Load configuration
+        async for result in self.load_config_streaming(config_path):
+            if result.is_valid and result.config_data:
+                async with self._config_lock:
+                    self._config_cache[cache_key] = result.config_data
+                return result.config_data
+        
+        return None
+    
+    async def update_config_async(self, config_path: Union[str, Path], new_config: Dict[str, Any]) -> bool:
+        """
+        Update configuration with async validation and caching.
+        
+        Args:
+            config_path: Path to configuration file
+            new_config: New configuration data
+            
+        Returns:
+            True if update successful, False otherwise
+        """
+        try:
+            config_path = Path(config_path)
+            
+            # Validate new configuration
+            validation_result = await self._validate_config_async(new_config)
+            if not validation_result.is_valid:
+                return False
+            
+            # Save configuration
+            async with self._config_lock:
+                if config_path.suffix.lower() == '.json':
+                    with open(config_path, 'w', encoding='utf-8') as f:
+                        json.dump(new_config, f, indent=2)
+                elif config_path.suffix.lower() in ['.yml', '.yaml']:
+                    with open(config_path, 'w', encoding='utf-8') as f:
+                        yaml.safe_dump(new_config, f, default_flow_style=False)
+            
+            # Update cache
+            cache_key = str(config_path)
+            async with self._config_lock:
+                self._config_cache[cache_key] = new_config
+                self._validation_cache[cache_key] = validation_result
+            
+            return True
+            
+        except Exception:
+            return False
+    
+    async def get_workflow_config_async(self, workflow_name: str) -> Optional[Dict[str, Any]]:
+        """Get workflow configuration with async loading."""
+        workflows_config = await self.get_config_async(self.workflows_path)
+        if workflows_config and workflow_name in workflows_config:
+            return workflows_config[workflow_name]
+        return None
+    
+    async def get_agents_config_async(self) -> Optional[Dict[str, Any]]:
+        """Get agents configuration with async loading."""
+        return await self.get_config_async(self.agents_config_path)
+
+# Section 4: Singleton Instance Creation
+# Purpose: Ensures only one instance of ConfigManager exists
+
 # Create a single, globally accessible instance of the ConfigManager
 config_manager = ConfigManager()
 #

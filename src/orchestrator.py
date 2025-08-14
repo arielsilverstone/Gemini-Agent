@@ -16,13 +16,13 @@ from src.rule_engine import RuleEngine
 from src.websocket_manager import WebSocketManager
 
 # Import all agent classes
-from src.agents.agent_base import AgentBase
-from src.agents.codegen_agent import CodeGenAgent
-from src.agents.doc_agent import DocAgent
-from src.agents.fix_agent import FixAgent
-from src.agents.planner_agent import PlannerAgent
-from src.agents.qa_agent import QaAgent
-from src.agents.test_agent import TestAgent
+from agents.agent_base import AgentBase
+from agents.codegen_agent import CodeGenAgent
+from agents.doc_agent import DocAgent
+from agents.fix_agent import FixAgent
+from agents.planner_agent import PlannerAgent
+from agents.qa_agent import QaAgent
+from agents.test_agent import TestAgent
 
 # ============================================================================
 # SECTION 2: Class Definition - Orchestrator

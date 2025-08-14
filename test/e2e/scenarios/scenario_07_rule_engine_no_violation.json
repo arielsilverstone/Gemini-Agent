@@ -1,0 +1,10 @@
+{
+  "id": "rule_engine_no_violation",
+  "name": "Rule Engine - No Violation (Long Output)",
+  "category": "rule_engine",
+  "type": "rule_engine_test",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 60,
+  "retry_count": 1
+}

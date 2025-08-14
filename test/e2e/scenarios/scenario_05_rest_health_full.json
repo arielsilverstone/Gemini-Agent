@@ -1,0 +1,10 @@
+{
+  "id": "rest_health_full",
+  "name": "REST Health - Full Mode",
+  "category": "connectivity",
+  "type": "rest_health_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 30,
+  "retry_count": 2
+}

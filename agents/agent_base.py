@@ -45,13 +45,22 @@ class AgentBase(ABC):
     Abstract base class for all specialized AI agents, providing integrated
     rule processing, template management, and error handling capabilities.
     """
+    # Class-level attribute declarations for type hinting
+    name: str
+    config: Dict[str, Any]
+    context: Dict[str, Any]
+    websocket_manager: Optional[WebSocketManager]
+    rule_engine: Optional[RuleEngine]
+    config_manager: Optional[ConfigManager]
+    status: str
+    project_root: str
 
-    #
-    # ========================================================================
-    # Method 2.1: __init__
-    # Purpose: Initialize the agent with required dependencies and configuration.
-    # ========================================================================
-    #
+#
+# ============================================================================
+# Method 2.1: __init__
+# Purpose: Initialize the agent with required dependencies and configuration.
+# ============================================================================
+#
     def __init__(
         self,
         name: str,
@@ -82,17 +91,19 @@ class AgentBase(ABC):
                 f"[{self.name}] No config manager provided - template management limited"
             )
 
-    #
-    # ========================================================================
-    # Async Method 2.2: _execute_llm_workflow_with_rules
-    # Purpose: Execute LLM workflow with integrated rule processing and retry logic.
-    # ========================================================================
-    #
+#
+# ============================================================================
+# Async Method 2.2: _execute_llm_workflow_with_rules
+# Purpose: Execute LLM workflow with integrated rule processing and retry logic.
+# ============================================================================
+#
     @record_telemetry("AgentBase", "execute_workflow_with_rules")
     async def _execute_llm_workflow_with_rules(
         self, prompt: str, task: str, context: Dict, max_rule_retries: int = 3
     ) -> AsyncIterator[str]:
         """
+        Execute LLM workflow with integrated rule processing and retry logic.
+
         Args:
             prompt: The initial prompt to send to the LLM
             task: The task being performed
@@ -141,7 +152,7 @@ class AgentBase(ABC):
                             await self.websocket_manager.send_message_to_client(
                                 f"STREAM_CHUNK:{self.name}:[{self.name}] Output modified by rule processing.\n"
                             )
-                        yield f"\n[RULE_PROCESSED] Output modified for compliance.\n"
+                    yield f"\n[RULE_PROCESSED] Output modified for compliance.\n"
                     return
 
                 # Prepare for retry with enhanced prompt
@@ -194,13 +205,13 @@ class AgentBase(ABC):
     ) -> Tuple[str, bool, Optional[str]]:
         """
         Args:
-            output: The agent's output to validate
-            agent_name: The name of the agent generating the output
-            task: The original task description
-            context: Additional context for validation
+             output: The agent's output to validate
+             agent_name: The name of the agent generating the output
+             task: The original task description
+             context: Additional context for validation
 
         Returns:
-            Tuple of (processed_output, should_retry, retry_prompt)
+             Tuple of (processed_output, should_retry, retry_prompt)
         """
         # If no rule engine is available, return output as-is
         if not self.rule_engine:
@@ -246,11 +257,15 @@ class AgentBase(ABC):
                 processing_result.final_content
                 and processing_result.final_content != output
             ):
-                logger.info(f"[{self.name}] Rule processing modified output content")
+                logger.info(
+                    f"[{self.name}] Rule processing modified output content"
+                )
                 return processing_result.final_content, False, None
 
             else:
-                logger.debug(f"[{self.name}] Rule processing completed without changes")
+                logger.debug(
+                    f"[{self.name}] Rule processing completed without changes"
+                )
                 return output, False, None
 
         except Exception as e:
@@ -272,12 +287,12 @@ class AgentBase(ABC):
     ) -> Tuple[str, str]:
         """
         Args:
-            base_template_name: The default template name to use
-            task: The task being performed
-            context: Additional context that might affect template selection
+             base_template_name: The default template name to use
+             task: The task being performed
+             context: Additional context that might affect template selection
 
         Returns:
-            Tuple of (template_name, template_content)
+             Tuple of (template_name, template_content)
         """
         # If no config manager, return base template name
         if not self.config_manager:
@@ -309,25 +324,28 @@ class AgentBase(ABC):
                                     test_output, rule, task, context
                                 )
                             )
-                            # If this rule would be violated, apply its template override
-                            if violation_found:
-                                if rule.get("template_override"):
-                                    override_template = rule["template_override"]
-                                    logger.info(
-                                        f"[{self.name}] Applying template override: {override_template}"
-                                    )
-                                    template_content = (
-                                        self.config_manager.get_template_content(
-                                            override_template
-                                        )
+                        except Exception as e:
+                            logger.warning(f"Rule check failed for {rule.get('name', 'unknown')}: {e}")
+                            violation_found = False
+
+                        # If this rule would be violated, apply its template override
+                        if violation_found:
+                            if rule.get("template_override"):
+                                override_template = rule["template_override"]
+                                logger.info(
+                                    f"[{self.name}] Applying template override: {override_template}"
+                                )
+                                try:
+                                    template_content = self.config_manager.get_template_content(
+                                        override_template
                                     )
                                     if template_content:
                                         return override_template, template_content
-                        except Exception as e:
-                            logger.debug(
-                                f"[{self.name}] Error checking template override rule: {e}"
-                            )
-                            continue
+                                except Exception as e:
+                                    logger.debug(
+                                        f"[{self.name}] Error checking template override rule: {e}"
+                                    )
+                                continue
 
             # No overrides found, use base template
             template_content = self.config_manager.get_template_content(
@@ -487,10 +505,6 @@ class AgentBase(ABC):
 
             # Read file content
             content = await asyncio.to_thread(gdrive_read, file_id)
-            if content is not None:
-                # Assuming the content is text and needs decoding
-                return content.decode('utf-8')
-            return None
 
             # Check if content was successfully retrieved
             if content is None:
@@ -501,6 +515,9 @@ class AgentBase(ABC):
                         f"[ERROR] {error_message}"
                     )
                 return None
+
+            # Assuming the content is text and needs decoding
+            return content.decode('utf-8')
 
         except Exception as e:
             error_message = f"[{self.name}] Failed to read GDrive {file_desc}: {str(e)}"
@@ -718,19 +735,59 @@ class AgentBase(ABC):
         5. Use the rule engine for output validation
 
         Args:
-            task: The task description or instruction
-            context: Optional context dictionary with additional parameters
+             task: The task description or instruction
+             context: Optional context dictionary with additional parameters
 
         Yields:
-            String chunks representing the agent's response
+             String chunks representing the agent's response
 
         Note:
-            Implementations should use _execute_llm_workflow_with_rules() for
-            LLM calls that need rule processing, or _execute_llm_workflow()
-            for basic LLM calls without rules.
+             Implementations should use _execute_llm_workflow_with_rules() for
+             executing the agent's logic with rule enforcement.
         """
-        raise NotImplementedError("run() must be implemented by subclasses.")
+        raise NotImplementedError("Subclasses must implement this method")
 
+    async def _enforce_agent_rules(
+        self, output: str, task: str, context: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Validate agent output against configured rules using the rule engine.
+
+        Args:
+            output: The agent's output to validate
+            task: The original task description
+            context: Additional context for validation
+
+        Returns:
+            List of rule violations as dictionaries with details
+        """
+        if not self.rule_engine:
+            logger.warning(f"[{self.name}] No rule engine available - skipping rule enforcement")
+            return []
+
+        try:
+            # Call async validate_output directly
+            violations = await self.rule_engine.validate_output(
+                output=output,
+                agent_name=self.name,
+                task=task,
+                context=context or {}
+            )
+            # Convert RuleViolation objects to dictionaries
+            violations_dict = []
+            for v in violations:
+                violations_dict.append({
+                    'rule_id': v.rule_id,
+                    'rule_name': v.rule_name,
+                    'rule_type': v.rule_type,
+                    'message': v.message,
+                    'action': str(v.action.value) if hasattr(v.action, 'value') else str(v.action),
+                    'severity': str(v.severity.value) if hasattr(v.severity, 'value') else str(v.severity)
+                })
+            return violations_dict
+        except Exception as e:
+            logger.error(f"[{self.name}] Error enforcing agent rules: {e}")
+            return []
 
 #
 # ============================================================================
@@ -741,60 +798,60 @@ class AgentBase(ABC):
 # ============================================================================
 #
 async def _stream_llm_response(
-    model_name: str,
-    contents: List[Any],
-    generation_config: Optional[GenerationConfigType] = None,
+     model_name: str,
+     contents: List[Any],
+     generation_config: Optional[GenerationConfigType] = None,
 ) -> AsyncIterator[Any]:
 
-    try:
-        # Create model instance
-        model = genai.GenerativeModel(model_name)
+     try:
+          # Create model instance
+          model = genai.GenerativeModel(model_name)
 
-        # Generate content with streaming
-        response: AsyncGenerateContentResponse = await model.generate_content_async(
-            contents, stream=True, generation_config=generation_config
-        )
+          # Generate content with streaming
+          response: AsyncGenerateContentResponse = await model.generate_content_async(
+               contents, stream=True, generation_config=generation_config
+          )
 
-        # Stream response chunks
-        async for chunk in response:
-            # Validate chunk has text content
-            if not hasattr(chunk, "text") or not chunk.text:
-                logger.warning(f"LLM stream returned a chunk with no text: {chunk}")
-                continue
-            yield chunk
+          # Stream response chunks
+          async for chunk in response:
+               # Validate chunk has text content
+               if not hasattr(chunk, "text") or not chunk.text:
+                    logger.warning(f"LLM stream returned a chunk with no text: {chunk}")
+                    continue
+               yield chunk
 
-    except StopCandidateException as e:
-        error_message = f"[ERROR] LLM Stream Stopped: {str(e)}"
-        logger.warning(error_message)
-        yield error_message
-    except Exception as e:
-        error_message = f"[ERROR] LLM communication error: {str(e)}"
-        logger.error(error_message, exc_info=True)
-        yield error_message
-#
+     except StopCandidateException as e:
+          error_message = f"[ERROR] LLM Stream Stopped: {str(e)}"
+          logger.warning(error_message)
+          yield error_message
+     except Exception as e:
+          error_message = f"[ERROR] LLM communication error: {str(e)}"
+          logger.error(error_message, exc_info=True)
+          yield error_message
+
 # ============================================================================
 # SECTION 4:Performance Decorator
 # Purpose: Decorator to measure and log function execution time and memory usage.
 # ============================================================================
 #
 def performance_monitor(func):
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        start_memory = psutil.Process().memory_info().rss
+     @wraps(func)
+     async def wrapper(*args, **kwargs):
+          start_time = time.perf_counter()
+          start_memory = psutil.Process().memory_info().rss
 
-        result = await func(*args, **kwargs)
+          result = await func(*args, **kwargs)
 
-        end_time = time.perf_counter()
-        end_memory = psutil.Process().memory_info().rss
+          end_time = time.perf_counter()
+          end_memory = psutil.Process().memory_info().rss
 
-        logger.info(
-            f"PERF: {func.__name__} took {end_time - start_time:.3f}s, "
-            f"memory: {(end_memory - start_memory) / 1024 / 1024:.2f}MB"
-        )
-        return result
+          logger.info(
+               f"PERF: {func.__name__} took {end_time - start_time:.3f}s, "
+               f"memory: {(end_memory - start_memory) / 1024 / 1024:.2f}MB"
+          )
+          return result
 
-    return wrapper
+     return wrapper
 #
 #
 ## End of agent_base.py

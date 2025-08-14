@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_medium",
+  "name": "Agent Execution - Codegen Medium Task",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate a CLI that parses two integers and prints their sum",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 150,
+  "retry_count": 1
+}

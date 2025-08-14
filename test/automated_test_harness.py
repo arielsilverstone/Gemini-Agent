@@ -33,16 +33,19 @@ from loguru import logger
 
 try:
     from test_scenario_generator import ScenarioTestHarness
+    logger.info("ScenarioTestHarness loaded successfully")
 except Exception:
     ScenarioTestHarness = None  # Optional; generator-based scenarios are loaded lazily elsewhere
+    logger.info("ScenarioTestHarness failed to load")
 
 try:
     # The distribution is "python-dotenv"; runtime import is "dotenv"
     from dotenv import load_dotenv
+    logger.info("load_dotenv loaded successfully")
 except Exception:
     # Fallback no-op to avoid hard dependency during CI/E2E runs
     load_dotenv: Callable[..., bool] = lambda *args, **kwargs: False
-
+    logger.info("load_dotenv failed to load")
 #
 PROJECT_ROOT = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 TESTS_DIR = PROJECT_ROOT / 'tests'
@@ -274,6 +277,10 @@ class TestEnvironmentManager:
             # Install base requirements needed by tests and server
             base_packages = [
                 "pytest",
+                "pytest-asyncio",
+                "pytest-timeout",
+                "pytest-cov",
+                "coverage",
                 "requests",
                 "websockets",
                 "pyyaml",
@@ -281,9 +288,14 @@ class TestEnvironmentManager:
                 "fastapi",
                 "uvicorn",
                 "pydantic==2.11.7",
+                "pydantic-core==2.11.7",
                 "psutil",
                 "jsonschema",
                 "google-generativeai",
+                "python-dotenv",
+                "anthropic",
+                "mcp",
+                "virtualenv"
             ]
             if requirements is not None:
                 base_packages.extend(requirements)
@@ -391,6 +403,7 @@ class TestEnvironmentManager:
     #
     async def cleanup_all(self):
         for test_id in list(self.current_venvs.keys()):
+            logger.info(f"Cleaning up test environment: {test_id}")
             await self.cleanup_environment(test_id)
 #
 # ============================================================================
@@ -420,29 +433,34 @@ class ServerManager:
 
         for port in range(start_port, PORT_RANGE_END):
             if port not in self.occupied_ports:
+
                 try:
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         s.bind(('localhost', port))
                         self.occupied_ports.add(port)
+                        logger.info(f"Found available port: {port}")
                         return port
                 except OSError:
+                    logger.info(f"Port {port} is not available")
                     continue
 
         raise RuntimeError(f"No available ports in range {start_port}-{PORT_RANGE_END}")
     #
     # ========================================================================
     # Async Method 5.1.3: start_test_server
-    # Purpose: Start a test server instance.
+    # Purpose: Create a VEnv and Start a test server instance.
     # ========================================================================
     #
     async def start_test_server(self, server_type: str, venv_path: Path, port: Optional[int] = None) -> Tuple[subprocess.Popen, int]:
         try:
             if port is None:
                 port = self.find_available_port()
+                logger.info(f"Found available port: {port}")
 
             python_exe = venv_path / 'Scripts' / 'python.exe'
             if not python_exe.exists():
                 python_exe = venv_path / 'bin' / 'python'
+                logger.info(f"Python executable not found at {python_exe}, trying {venv_path / 'bin' / 'python'}")
 
             project_path = venv_path / 'project'
 
@@ -461,6 +479,7 @@ class ServerManager:
             env['PYTHONPATH'] = str(project_path)
             # Enable minimal startup for lightweight connectivity/health tests to avoid heavy deps at boot
             if server_type.lower() in ('websocket', 'api_minimal'):
+                logger.info(f"Enabling minimal startup for {server_type}")
                 env['GA_MINIMAL_STARTUP'] = '1'
 
             process = subprocess.Popen(
@@ -484,12 +503,15 @@ class ServerManager:
                     resp = requests.get(f"http://127.0.0.1:{port}/health", timeout=1.5)
                     if resp.status_code == 200:
                         server_ready = True
+                        logger.info(f"Server started on port {port}")
                         break
                 except Exception:
+                    logger.info(f"Server did not become ready within 30s")
                     pass
                 await asyncio.sleep(0.5)
 
             if not server_ready:
+                logger.info(f"Server did not become ready within 30s")
                 raise RuntimeError("Server did not become ready within 30s")
 
             self.running_processes[f"{server_type}_{port}"] = process
@@ -506,18 +528,22 @@ class ServerManager:
     # ========================================================================
     #
     async def stop_server(self, server_key: str):
+
         try:
             if server_key in self.running_processes:
                 process = self.running_processes[server_key]
+                logger.info(f"Stopping {server_key}")
 
                 # Try graceful shutdown first
                 process.terminate()
                 try:
                     process.wait(timeout=10)
+                    logger.info(f"Server {server_key} stopped")
                 except subprocess.TimeoutExpired:
                     # Force kill if graceful shutdown fails
                     process.kill()
                     process.wait()
+                    logger.info(f"Server {server_key} stopped")
 
                 del self.running_processes[server_key]
 
@@ -537,6 +563,7 @@ class ServerManager:
     #
     async def stop_all_servers(self):
         for server_key in list(self.running_processes.keys()):
+            logger.info(f"Stopping {server_key}")
             await self.stop_server(server_key)
 #
 # ============================================================================
@@ -556,7 +583,8 @@ class FunctionalTestExecutor:
     def __init__(self, env_manager: TestEnvironmentManager, server_manager: ServerManager):
         self.env_manager = env_manager
         self.server_manager = server_manager
-   #
+        logger.info("Test executor initialized")
+    #
     # ========================================================================
     # Async Method 6.1.2: test_websocket_connectivity
     # Purpose: Test WebSocket server connectivity and basic communication.
@@ -1159,8 +1187,10 @@ class TestSuiteOrchestrator:
     #
     # ========================================================================
     # Method 7.1.6: _get_fallback_scenarios
-    # Purpose: Return fallback scenarios if specification files cannot be loaded.
+    # Purpose: Return fallback scenarios if specification files cannot be
+    #          loaded.
     # ========================================================================
+    #
     def _get_fallback_scenarios(self) -> List[Dict]:
 
         return [
@@ -1247,20 +1277,21 @@ class TestSuiteOrchestrator:
                 results = await self._execute_sequential_tests(enabled_scenarios)
                 logger.info(f"(enabled_scenarios)")
 
-            # Process results
-            for result in results:
-                self.current_session.test_results.append(result)
-                logger.info(f"(result)")
-                if result.status == "PASS":
-                    self.current_session.passed_tests += 1
-                elif result.status == "FAIL":
-                    self.current_session.failed_tests += 1
-                elif result.status == "ERROR":
-                    self.current_session.error_tests += 1
-                elif result.status == "TIMEOUT":
-                    self.current_session.timeout_tests += 1
-                else:
-                    self.current_session.skipped_tests += 1
+            # Process results (avoid double-counting if live updates already appended)
+            if not self.current_session.test_results:
+                for result in results:
+                    self.current_session.test_results.append(result)
+                    logger.info(f"(result)")
+                    if result.status == "PASS":
+                        self.current_session.passed_tests += 1
+                    elif result.status == "FAIL":
+                        self.current_session.failed_tests += 1
+                    elif result.status == "ERROR":
+                        self.current_session.error_tests += 1
+                    elif result.status == "TIMEOUT":
+                        self.current_session.timeout_tests += 1
+                    else:
+                        self.current_session.skipped_tests += 1
 
             # Finalize session
             end_time = datetime.now(timezone.utc)
@@ -1293,6 +1324,7 @@ class TestSuiteOrchestrator:
     # ========================================================================
     #
     async def _execute_parallel_tests(self, scenarios: List[Dict], max_workers: int) -> List[TestResult]:
+
         semaphore = asyncio.Semaphore(max_workers)
         #
         # ========================================================================
@@ -1341,15 +1373,9 @@ class TestSuiteOrchestrator:
 
             try:
                 result = await self._execute_single_test(scenario)
-                results.append(result)
-
-                # Save intermediate progress
-                if i % 5 == 0:  # Save every 5 tests
-                    await self._save_session_state()
-
             except Exception as e:
                 logger.error(f"Failed to execute test {scenario.get('id', 'unknown')}: {e}")
-                error_result = TestResult(
+                result = TestResult(
                     test_id=scenario.get('id', f'test_{i}'),
                     test_name=scenario.get('name', 'Unknown Test'),
                     category=scenario.get('category', 'unknown'),
@@ -1359,7 +1385,26 @@ class TestSuiteOrchestrator:
                     end_time=datetime.now(timezone.utc).isoformat(),
                     error_message=str(e)
                 )
-                results.append(error_result)
+
+            # Always record the result for this test
+            results.append(result)
+
+            # Live update session counters and results after each test
+            if self.current_session:
+                self.current_session.test_results.append(result)
+                if result.status == "PASS":
+                    self.current_session.passed_tests += 1
+                elif result.status == "FAIL":
+                    self.current_session.failed_tests += 1
+                elif result.status == "ERROR":
+                    self.current_session.error_tests += 1
+                elif result.status == "TIMEOUT":
+                    self.current_session.timeout_tests += 1
+                else:
+                    self.current_session.skipped_tests += 1
+
+            # Save intermediate progress after each test (even on exceptions)
+            await self._save_session_state()
 
         return results
     #
@@ -1373,6 +1418,25 @@ class TestSuiteOrchestrator:
         test_type = scenario.get('type', 'unknown')
         test_id = scenario.get('id', 'unknown_test')
         retry_count = scenario.get('retry_count', 0)
+
+        # Map extended multi-agent scenario types to workflow execution
+        multi_agent_types = {
+            'multi_agent_workflow',
+            'stress_test',
+            'context_management',
+            'rule_validation',
+            'external_integration',
+            'streaming_test',
+            'template_workflow',
+            'performance_test',
+            'fault_isolation',
+            'load_balancing',
+            'security_test',
+            'version_control',
+            'api_integration',
+            'database_workflow',
+            'microservices',
+        }
 
         last_result = None
 
@@ -1394,6 +1458,17 @@ class TestSuiteOrchestrator:
                     result = await self.test_executor.test_workflow_execution(test_id, workflow_config)
                 elif test_type == 'rule_engine_test':
                     result = await self.test_executor.test_rule_engine_functionality(test_id)
+                elif test_type in multi_agent_types:
+                    # Build workflow_config from top-level fields if not already provided
+                    workflow_config = scenario.get('workflow_config') or {
+                        'mode': test_type,
+                        'agents': scenario.get('agents', []),
+                        'workflow': scenario.get('workflow', 'sequential'),
+                        'actions': scenario.get('actions', []),
+                        'pass_criteria': scenario.get('pass_criteria', []),
+                        'fail_criteria': scenario.get('fail_criteria', []),
+                    }
+                    result = await self.test_executor.test_workflow_execution(test_id, workflow_config)
                 else:
                     raise ValueError(f"Unknown test type: {test_type}")
 
@@ -1746,7 +1821,6 @@ Examples:
         logger.error(f"Test execution failed: {e}")
         await orchestrator._emergency_cleanup()
         sys.exit(4)
-#
 # ============================================================================
 # SECTION 9: Entry Point
 # ============================================================================
