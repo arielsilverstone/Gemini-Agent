@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_test_fix_loop",
+  "name": "Multi-Agent Test-Fix Iteration Loop",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 200,
+  "retry_count": 1,
+  "description": "Test agent finds issues, fix agent resolves, iterates until clean",
+  "agents": ["test_agent", "fix_agent", "qa_agent"],
+  "workflow": "iterative",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Load test code with intentional bugs",
+    "Execute test_agent task: run comprehensive tests",
+    "Execute fix_agent task: fix identified issues",
+    "Execute qa_agent task: validate fixes",
+    "Repeat until all tests pass"
+  ],
+  "pass_criteria": [
+    "All tests eventually pass",
+    "Iterative loop completes",
+    "Code quality improved",
+    "Agent coordination maintained"
+  ],
+  "fail_criteria": [
+    "Infinite loop detected",
+    "Fix attempts exceeded",
+    "Agent coordination breakdown"
+  ]
+}

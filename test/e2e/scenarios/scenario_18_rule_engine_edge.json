@@ -1,0 +1,10 @@
+{
+  "id": "rule_engine_edge_cases",
+  "name": "Rule Engine - Edge Cases",
+  "category": "rule_engine",
+  "type": "rule_engine_test",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 80,
+  "retry_count": 1
+}

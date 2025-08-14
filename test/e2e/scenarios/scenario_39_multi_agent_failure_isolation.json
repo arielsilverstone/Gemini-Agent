@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_failure_isolation",
+  "name": "Multi-Agent Failure Isolation and Containment",
+  "category": "multi_agent",
+  "type": "fault_isolation",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 100,
+  "retry_count": 2,
+  "description": "Test that agent failures are isolated and don't cascade to other agents",
+  "agents": ["codegen_agent", "test_agent", "qa_agent", "doc_agent"],
+  "workflow": "failure_isolation",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute multiple agents in parallel",
+    "Inject failure into one agent",
+    "Verify failure isolation",
+    "Validate other agents continue normally",
+    "Test failure recovery mechanisms"
+  ],
+  "pass_criteria": [
+    "Failure properly isolated",
+    "Other agents unaffected",
+    "System remains stable",
+    "Recovery mechanisms activated"
+  ],
+  "fail_criteria": [
+    "Failure cascades to other agents",
+    "System-wide instability",
+    "Recovery mechanisms fail"
+  ]
+}

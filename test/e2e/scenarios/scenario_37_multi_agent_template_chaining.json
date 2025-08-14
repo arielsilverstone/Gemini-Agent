@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_template_chaining",
+  "name": "Multi-Agent Template and Prompt Chaining",
+  "category": "multi_agent",
+  "type": "template_workflow",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 100,
+  "retry_count": 2,
+  "description": "Agents use chained templates where output becomes input for next agent",
+  "agents": ["planner_agent", "codegen_agent", "doc_agent"],
+  "workflow": "template_chain",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Load template configurations",
+    "Execute planner_agent task: generate template-based plan",
+    "Execute codegen_agent task: use plan as template input",
+    "Execute doc_agent task: use code as documentation template",
+    "Validate template chaining integrity"
+  ],
+  "pass_criteria": [
+    "Template chaining successful",
+    "Each agent uses previous output",
+    "Template integrity maintained",
+    "Final output incorporates all stages"
+  ],
+  "fail_criteria": [
+    "Template chaining break",
+    "Template format corruption",
+    "Agent input/output mismatch"
+  ]
+}

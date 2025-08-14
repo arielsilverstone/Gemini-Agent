@@ -1,0 +1,10 @@
+{
+  "id": "rule_engine_retry_bias",
+  "name": "Rule Engine - Retry Bias",
+  "category": "rule_engine",
+  "type": "rule_engine_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 65,
+  "retry_count": 2
+}

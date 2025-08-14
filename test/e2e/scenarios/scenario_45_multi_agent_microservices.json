@@ -1,0 +1,36 @@
+
+{
+  "id": "multi_agent_microservices",
+  "name": "Multi-Agent Microservices Orchestration",
+  "category": "multi_agent",
+  "type": "microservices",
+  "enabled": true,
+  "priority": 5,
+  "timeout": 200,
+  "retry_count": 1,
+  "description": "Agents coordinate to simulate and manage microservices architecture",
+  "agents": ["planner_agent", "codegen_agent", "test_agent", "qa_agent", "doc_agent"],
+  "workflow": "microservices_orchestration",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute planner_agent task: design microservices architecture",
+    "Execute codegen_agent task: generate service implementations",
+    "Execute test_agent task: create inter-service tests",
+    "Execute qa_agent task: validate service contracts",
+    "Execute doc_agent task: document service APIs",
+    "Coordinate microservices deployment simulation"
+  ],
+  "pass_criteria": [
+    "Architecture designed successfully",
+    "All services generated",
+    "Inter-service tests pass",
+    "Service contracts validated",
+    "API documentation complete"
+  ],
+  "fail_criteria": [
+    "Architecture design flaws",
+    "Service generation failures",
+    "Inter-service communication errors"
+  ]
+}

@@ -1,0 +1,31 @@
+
+{
+  "id": "multi_agent_codegen_test",
+  "name": "Multi-Agent Code Generation and Testing",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 120,
+  "retry_count": 2,
+  "description": "Codegen agent creates code, test agent validates it",
+  "agents": ["codegen_agent", "test_agent"],
+  "workflow": "sequential",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute codegen_agent task: create simple calculator function",
+    "Execute test_agent task: generate unit tests for calculator",
+    "Validate test execution results"
+  ],
+  "pass_criteria": [
+    "Code generated successfully",
+    "Tests created and passed",
+    "Multi-agent coordination completed"
+  ],
+  "fail_criteria": [
+    "Agent communication failure",
+    "Code generation timeout",
+    "Test execution failure"
+  ]
+}

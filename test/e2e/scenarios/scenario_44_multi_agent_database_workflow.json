@@ -1,0 +1,35 @@
+
+{
+  "id": "multi_agent_database_workflow",
+  "name": "Multi-Agent Database Workflow Management",
+  "category": "multi_agent",
+  "type": "database_workflow",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 140,
+  "retry_count": 2,
+  "description": "Agents coordinate database operations: schema, queries, validation",
+  "agents": ["codegen_agent", "qa_agent", "test_agent"],
+  "workflow": "database_coordination",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Initialize database connection",
+    "Execute codegen_agent task: generate database schema",
+    "Execute codegen_agent task: create database queries",
+    "Execute test_agent task: test database operations",
+    "Execute qa_agent task: validate database design",
+    "Coordinate database workflow completion"
+  ],
+  "pass_criteria": [
+    "Database connection established",
+    "Schema created successfully",
+    "Queries executed correctly",
+    "Database design validated"
+  ],
+  "fail_criteria": [
+    "Database connection failure",
+    "Schema creation errors",
+    "Query execution failures"
+  ]
+}

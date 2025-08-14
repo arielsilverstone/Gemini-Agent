@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_io",
+  "name": "Agent Execution - File IO",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate code that writes and reads a file named out.txt",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 160,
+  "retry_count": 1
+}

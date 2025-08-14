@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_load_balancing",
+  "name": "Multi-Agent Load Balancing and Resource Distribution",
+  "category": "multi_agent",
+  "type": "load_balancing",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 150,
+  "retry_count": 2,
+  "description": "Test load balancing across multiple instances of the same agent type",
+  "agents": ["codegen_agent", "codegen_agent", "codegen_agent", "test_agent"],
+  "workflow": "load_balanced",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Configure load balancing for codegen agents",
+    "Submit multiple codegen tasks simultaneously",
+    "Monitor task distribution across agent instances",
+    "Execute test_agent task: validate all outputs",
+    "Verify load balancing effectiveness"
+  ],
+  "pass_criteria": [
+    "Tasks distributed evenly",
+    "All agent instances utilized",
+    "Load balancing effective",
+    "All outputs validated successfully"
+  ],
+  "fail_criteria": [
+    "Uneven load distribution",
+    "Agent instance idle",
+    "Load balancing failure"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_quick",
+  "name": "Agent Execution - Codegen Quick",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate hello world script",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 90,
+  "retry_count": 1
+}

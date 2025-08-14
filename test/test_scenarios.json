@@ -1,254 +1,1038 @@
 [
-  {
-    "id": "rest_health_minimal",
-    "name": "REST Health - Minimal Mode",
-    "category": "connectivity",
-    "type": "rest_health_test",
-    "enabled": true,
-    "priority": 1,
-    "timeout": 20,
-    "retry_count": 2
-  },
-  {
-    "id": "rest_health_retry",
-    "name": "REST Health - Retry Emphasis",
-    "category": "connectivity",
-    "type": "rest_health_test",
-    "enabled": true,
-    "priority": 1,
-    "timeout": 15,
-    "retry_count": 3
-  },
-  {
-    "id": "ws_connectivity_minimal_01",
-    "name": "WebSocket Connectivity - Minimal Mode 01",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 1,
-    "timeout": 30,
-    "retry_count": 2
-  },
-  {
-    "id": "ws_connectivity_minimal_02",
-    "name": "WebSocket Connectivity - Minimal Mode 02",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 1,
-    "timeout": 30,
-    "retry_count": 2
-  },
-  {
-    "id": "agent_codegen_quick",
-    "name": "Agent Execution - Codegen Quick",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate hello world script",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 90,
-    "retry_count": 1
-  },
-  {
-    "id": "rest_health_full",
-    "name": "REST Health - Full Mode",
-    "category": "connectivity",
-    "type": "rest_health_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 30,
-    "retry_count": 2
-  },
-  {
-    "id": "rest_health_slow",
-    "name": "REST Health - Slow Startup Allowance",
-    "category": "connectivity",
-    "type": "rest_health_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 45,
-    "retry_count": 2
-  },
-  {
-    "id": "rule_engine_min_length",
-    "name": "Rule Engine - Min Length Violation",
-    "category": "rule_engine",
-    "type": "rule_engine_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 60,
-    "retry_count": 1
-  },
-  {
-    "id": "rule_engine_retry_bias",
-    "name": "Rule Engine - Retry Bias",
-    "category": "rule_engine",
-    "type": "rule_engine_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 65,
-    "retry_count": 2
-  },
-  {
-    "id": "ws_invalid_message_error",
-    "name": "WebSocket Invalid Message Error Path",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 30,
-    "retry_count": 2
-  },
-  {
-    "id": "ws_ping_pong_full",
-    "name": "WebSocket Ping/Pong - Full Mode",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 45,
-    "retry_count": 2
-  },
-  {
-    "id": "ws_sequential_duo",
-    "name": "WebSocket Sequential Connections x2",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 60,
-    "retry_count": 1
-  },
-  {
-    "id": "ws_start_workflow_message",
-    "name": "WebSocket Start Workflow Message",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 2,
-    "timeout": 45,
-    "retry_count": 2
-  },
-  {
-    "id": "agent_codegen_medium",
-    "name": "Agent Execution - Codegen Medium Task",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate a CLI that parses two integers and prints their sum",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 150,
-    "retry_count": 1
-  },
-  {
-    "id": "agent_codegen_small",
-    "name": "Agent Execution - Codegen Small Task",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate a simple function to add two numbers",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 120,
-    "retry_count": 1
-  },
-  {
-    "id": "rule_engine_no_violation",
-    "name": "Rule Engine - No Violation (Long Output)",
-    "category": "rule_engine",
-    "type": "rule_engine_test",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 60,
-    "retry_count": 1
-  },
-  {
-    "id": "rule_engine_stress",
-    "name": "Rule Engine - Stress Multiple Checks",
-    "category": "rule_engine",
-    "type": "rule_engine_test",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 75,
-    "retry_count": 1
-  },
-  {
-    "id": "ws_parallel_duo",
-    "name": "WebSocket Parallel Connections x2",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 60,
-    "retry_count": 1
-  },
-  {
-    "id": "ws_reconnect",
-    "name": "WebSocket Reconnect",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 3,
-    "timeout": 60,
-    "retry_count": 2
-  },
-  {
-    "id": "agent_codegen_long",
-    "name": "Agent Execution - Codegen Longer Task",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate a small module with two functions and unit tests",
-    "enabled": true,
-    "priority": 4,
-    "timeout": 180,
-    "retry_count": 1
-  },
-  {
-    "id": "agent_codegen_error_handling",
-    "name": "Agent Execution - Error Handling",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate code that intentionally raises and catches an exception",
-    "enabled": true,
-    "priority": 4,
-    "timeout": 150,
-    "retry_count": 1
-  },
-  {
-    "id": "agent_codegen_io",
-    "name": "Agent Execution - File IO",
-    "category": "agent_execution",
-    "type": "agent_test",
-    "agent_name": "codegen_agent",
-    "task": "Generate code that writes and reads a file named out.txt",
-    "enabled": true,
-    "priority": 4,
-    "timeout": 160,
-    "retry_count": 1
-  },
-  {
-    "id": "rule_engine_edge_cases",
-    "name": "Rule Engine - Edge Cases",
-    "category": "rule_engine",
-    "type": "rule_engine_test",
-    "enabled": true,
-    "priority": 4,
-    "timeout": 80,
-    "retry_count": 1
-  },
-  {
-    "id": "ws_spam_messages",
-    "name": "WebSocket Spam Messages",
-    "category": "connectivity",
-    "type": "websocket_test",
-    "enabled": true,
-    "priority": 4,
-    "timeout": 75,
-    "retry_count": 1
-  }
+    {
+        "id":  "rest_health_minimal",
+        "name":  "REST Health - Minimal Mode",
+        "category":  "connectivity",
+        "type":  "rest_health_test",
+        "enabled":  true,
+        "priority":  1,
+        "timeout":  20,
+        "retry_count":  2
+    },
+    {
+        "id":  "rest_health_retry",
+        "name":  "REST Health - Retry Emphasis",
+        "category":  "connectivity",
+        "type":  "rest_health_test",
+        "enabled":  true,
+        "priority":  1,
+        "timeout":  15,
+        "retry_count":  3
+    },
+    {
+        "id":  "ws_connectivity_minimal_01",
+        "name":  "WebSocket Connectivity - Minimal Mode 01",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  1,
+        "timeout":  30,
+        "retry_count":  2
+    },
+    {
+        "id":  "ws_connectivity_minimal_02",
+        "name":  "WebSocket Connectivity - Minimal Mode 02",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  1,
+        "timeout":  30,
+        "retry_count":  2
+    },
+    {
+        "id":  "agent_codegen_quick",
+        "name":  "Agent Execution - Codegen Quick",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate hello world script",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  90,
+        "retry_count":  1
+    },
+    {
+        "id":  "rest_health_full",
+        "name":  "REST Health - Full Mode",
+        "category":  "connectivity",
+        "type":  "rest_health_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  30,
+        "retry_count":  2
+    },
+    {
+        "id":  "rest_health_slow",
+        "name":  "REST Health - Slow Startup Allowance",
+        "category":  "connectivity",
+        "type":  "rest_health_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  45,
+        "retry_count":  2
+    },
+    {
+        "id":  "rule_engine_min_length",
+        "name":  "Rule Engine - Min Length Violation",
+        "category":  "rule_engine",
+        "type":  "rule_engine_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  60,
+        "retry_count":  1
+    },
+    {
+        "id":  "rule_engine_retry_bias",
+        "name":  "Rule Engine - Retry Bias",
+        "category":  "rule_engine",
+        "type":  "rule_engine_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  65,
+        "retry_count":  2
+    },
+    {
+        "id":  "ws_invalid_message_error",
+        "name":  "WebSocket Invalid Message Error Path",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  30,
+        "retry_count":  2
+    },
+    {
+        "id":  "ws_ping_pong_full",
+        "name":  "WebSocket Ping/Pong - Full Mode",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  45,
+        "retry_count":  2
+    },
+    {
+        "id":  "ws_sequential_duo",
+        "name":  "WebSocket Sequential Connections x2",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  60,
+        "retry_count":  1
+    },
+    {
+        "id":  "ws_start_workflow_message",
+        "name":  "WebSocket Start Workflow Message",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  2,
+        "timeout":  45,
+        "retry_count":  2
+    },
+    {
+        "id":  "agent_codegen_medium",
+        "name":  "Agent Execution - Codegen Medium Task",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate a CLI that parses two integers and prints their sum",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  150,
+        "retry_count":  1
+    },
+    {
+        "id":  "agent_codegen_small",
+        "name":  "Agent Execution - Codegen Small Task",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate a simple function to add two numbers",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  120,
+        "retry_count":  1
+    },
+    {
+        "id":  "multi_agent_codegen_test",
+        "name":  "Multi-Agent Code Generation and Testing",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  120,
+        "retry_count":  2,
+        "description":  "Codegen agent creates code, test agent validates it",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent"
+                   ],
+        "workflow":  "sequential",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute codegen_agent task: create simple calculator function",
+                        "Execute test_agent task: generate unit tests for calculator",
+                        "Validate test execution results"
+                    ],
+        "pass_criteria":  [
+                              "Code generated successfully",
+                              "Tests created and passed",
+                              "Multi-agent coordination completed"
+                          ],
+        "fail_criteria":  [
+                              "Agent communication failure",
+                              "Code generation timeout",
+                              "Test execution failure"
+                          ]
+    },
+    {
+        "id":  "multi_agent_codegen_qa_doc",
+        "name":  "Multi-Agent Code-QA-Documentation Pipeline",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  150,
+        "retry_count":  2,
+        "description":  "Codegen creates code, QA validates, Doc agent documents",
+        "agents":  [
+                       "codegen_agent",
+                       "qa_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "sequential",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute codegen_agent task: create data processing module",
+                        "Execute qa_agent task: validate code quality and standards",
+                        "Execute doc_agent task: generate comprehensive documentation",
+                        "Validate pipeline completion"
+                    ],
+        "pass_criteria":  [
+                              "Code generated successfully",
+                              "QA validation passed",
+                              "Documentation created",
+                              "All agents coordinated properly"
+                          ],
+        "fail_criteria":  [
+                              "QA validation failed",
+                              "Documentation generation failed",
+                              "Agent coordination timeout"
+                          ]
+    },
+    {
+        "id":  "multi_agent_context_sharing",
+        "name":  "Multi-Agent Context and State Sharing",
+        "category":  "multi_agent",
+        "type":  "context_management",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  90,
+        "retry_count":  2,
+        "description":  "Test context sharing and state synchronization between agents",
+        "agents":  [
+                       "planner_agent",
+                       "codegen_agent",
+                       "qa_agent"
+                   ],
+        "workflow":  "context_aware",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute planner_agent task: create shared context",
+                        "Execute codegen_agent task: use shared context for generation",
+                        "Execute qa_agent task: validate using same context",
+                        "Verify context consistency across agents"
+                    ],
+        "pass_criteria":  [
+                              "Context shared successfully",
+                              "State synchronization maintained",
+                              "Context consistency verified",
+                              "Agent coordination based on shared state"
+                          ],
+        "fail_criteria":  [
+                              "Context sharing failure",
+                              "State synchronization lost",
+                              "Context inconsistency detected"
+                          ]
+    },
+    {
+        "id":  "multi_agent_planner_codegen_fix",
+        "name":  "Multi-Agent Planning, Generation, and Fixing",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  180,
+        "retry_count":  2,
+        "description":  "Planner designs, codegen implements, fix agent refines",
+        "agents":  [
+                       "planner_agent",
+                       "codegen_agent",
+                       "fix_agent"
+                   ],
+        "workflow":  "sequential",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute planner_agent task: design API structure",
+                        "Execute codegen_agent task: implement planned API",
+                        "Execute fix_agent task: refactor and optimize code",
+                        "Validate complete workflow"
+                    ],
+        "pass_criteria":  [
+                              "Planning completed successfully",
+                              "Code implementation matches plan",
+                              "Code optimization applied",
+                              "Workflow coordination successful"
+                          ],
+        "fail_criteria":  [
+                              "Planning phase failed",
+                              "Implementation mismatch",
+                              "Optimization failed"
+                          ]
+    },
+    {
+        "id":  "multi_agent_rule_engine_validation",
+        "name":  "Multi-Agent Rule Engine Validation",
+        "category":  "multi_agent",
+        "type":  "rule_validation",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  100,
+        "retry_count":  2,
+        "description":  "Multiple agents validate different aspects using rule engine",
+        "agents":  [
+                       "codegen_agent",
+                       "qa_agent",
+                       "fix_agent"
+                   ],
+        "workflow":  "rule_based",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Load rule engine configuration",
+                        "Execute codegen_agent task: generate code with rule compliance",
+                        "Execute qa_agent task: validate against coding rules",
+                        "Execute fix_agent task: apply rule-based fixes",
+                        "Validate rule compliance across all outputs"
+                    ],
+        "pass_criteria":  [
+                              "All rule validations passed",
+                              "Code complies with standards",
+                              "Rule engine coordination successful",
+                              "Multi-agent rule consistency"
+                          ],
+        "fail_criteria":  [
+                              "Rule validation failures",
+                              "Rule engine errors",
+                              "Agent rule conflicts"
+                          ]
+    },
+    {
+        "id":  "multi_agent_template_chaining",
+        "name":  "Multi-Agent Template and Prompt Chaining",
+        "category":  "multi_agent",
+        "type":  "template_workflow",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  100,
+        "retry_count":  2,
+        "description":  "Agents use chained templates where output becomes input for next agent",
+        "agents":  [
+                       "planner_agent",
+                       "codegen_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "template_chain",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Load template configurations",
+                        "Execute planner_agent task: generate template-based plan",
+                        "Execute codegen_agent task: use plan as template input",
+                        "Execute doc_agent task: use code as documentation template",
+                        "Validate template chaining integrity"
+                    ],
+        "pass_criteria":  [
+                              "Template chaining successful",
+                              "Each agent uses previous output",
+                              "Template integrity maintained",
+                              "Final output incorporates all stages"
+                          ],
+        "fail_criteria":  [
+                              "Template chaining break",
+                              "Template format corruption",
+                              "Agent input/output mismatch"
+                          ]
+    },
+    {
+        "id":  "multi_agent_test_fix_loop",
+        "name":  "Multi-Agent Test-Fix Iteration Loop",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  200,
+        "retry_count":  1,
+        "description":  "Test agent finds issues, fix agent resolves, iterates until clean",
+        "agents":  [
+                       "test_agent",
+                       "fix_agent",
+                       "qa_agent"
+                   ],
+        "workflow":  "iterative",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Load test code with intentional bugs",
+                        "Execute test_agent task: run comprehensive tests",
+                        "Execute fix_agent task: fix identified issues",
+                        "Execute qa_agent task: validate fixes",
+                        "Repeat until all tests pass"
+                    ],
+        "pass_criteria":  [
+                              "All tests eventually pass",
+                              "Iterative loop completes",
+                              "Code quality improved",
+                              "Agent coordination maintained"
+                          ],
+        "fail_criteria":  [
+                              "Infinite loop detected",
+                              "Fix attempts exceeded",
+                              "Agent coordination breakdown"
+                          ]
+    },
+    {
+        "id":  "multi_agent_version_control",
+        "name":  "Multi-Agent Version Control Integration",
+        "category":  "multi_agent",
+        "type":  "version_control",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  120,
+        "retry_count":  2,
+        "description":  "Agents coordinate to manage version control operations",
+        "agents":  [
+                       "codegen_agent",
+                       "doc_agent",
+                       "qa_agent"
+                   ],
+        "workflow":  "version_controlled",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Initialize version control workspace",
+                        "Execute codegen_agent task: generate and commit code",
+                        "Execute doc_agent task: generate and commit documentation",
+                        "Execute qa_agent task: validate and create review",
+                        "Coordinate version control operations"
+                    ],
+        "pass_criteria":  [
+                              "Version control initialized",
+                              "All commits successful",
+                              "Agent coordination maintained",
+                              "Repository state consistent"
+                          ],
+        "fail_criteria":  [
+                              "Version control conflicts",
+                              "Commit failures",
+                              "Repository corruption"
+                          ]
+    },
+    {
+        "id":  "rule_engine_no_violation",
+        "name":  "Rule Engine - No Violation (Long Output)",
+        "category":  "rule_engine",
+        "type":  "rule_engine_test",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  60,
+        "retry_count":  1
+    },
+    {
+        "id":  "rule_engine_stress",
+        "name":  "Rule Engine - Stress Multiple Checks",
+        "category":  "rule_engine",
+        "type":  "rule_engine_test",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  75,
+        "retry_count":  1
+    },
+    {
+        "id":  "ws_parallel_duo",
+        "name":  "WebSocket Parallel Connections x2",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  60,
+        "retry_count":  1
+    },
+    {
+        "id":  "ws_reconnect",
+        "name":  "WebSocket Reconnect",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  3,
+        "timeout":  60,
+        "retry_count":  2
+    },
+    {
+        "id":  "agent_codegen_long",
+        "name":  "Agent Execution - Codegen Longer Task",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate a small module with two functions and unit tests",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  180,
+        "retry_count":  1
+    },
+    {
+        "id":  "agent_codegen_error_handling",
+        "name":  "Agent Execution - Error Handling",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate code that intentionally raises and catches an exception",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  150,
+        "retry_count":  1
+    },
+    {
+        "id":  "agent_codegen_io",
+        "name":  "Agent Execution - File IO",
+        "category":  "agent_execution",
+        "type":  "agent_test",
+        "agent_name":  "codegen_agent",
+        "task":  "Generate code that writes and reads a file named out.txt",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  160,
+        "retry_count":  1
+    },
+    {
+        "id":  "multi_agent_database_workflow",
+        "name":  "Multi-Agent Database Workflow Management",
+        "category":  "multi_agent",
+        "type":  "database_workflow",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  140,
+        "retry_count":  2,
+        "description":  "Agents coordinate database operations: schema, queries, validation",
+        "agents":  [
+                       "codegen_agent",
+                       "qa_agent",
+                       "test_agent"
+                   ],
+        "workflow":  "database_coordination",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Initialize database connection",
+                        "Execute codegen_agent task: generate database schema",
+                        "Execute codegen_agent task: create database queries",
+                        "Execute test_agent task: test database operations",
+                        "Execute qa_agent task: validate database design",
+                        "Coordinate database workflow completion"
+                    ],
+        "pass_criteria":  [
+                              "Database connection established",
+                              "Schema created successfully",
+                              "Queries executed correctly",
+                              "Database design validated"
+                          ],
+        "fail_criteria":  [
+                              "Database connection failure",
+                              "Schema creation errors",
+                              "Query execution failures"
+                          ]
+    },
+    {
+        "id":  "multi_agent_error_recovery",
+        "name":  "Multi-Agent Error Recovery and Resilience",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  120,
+        "retry_count":  3,
+        "description":  "Test agent failure recovery and graceful degradation",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "fix_agent"
+                   ],
+        "workflow":  "fault_tolerant",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute codegen_agent task: generate code",
+                        "Simulate agent failure during execution",
+                        "Trigger error recovery mechanisms",
+                        "Continue with remaining agents",
+                        "Validate graceful degradation"
+                    ],
+        "pass_criteria":  [
+                              "Error detected and handled",
+                              "Recovery mechanisms activated",
+                              "Remaining agents continue",
+                              "Graceful degradation achieved"
+                          ],
+        "fail_criteria":  [
+                              "Unhandled agent failure",
+                              "System-wide crash",
+                              "Recovery failure"
+                          ]
+    },
+    {
+        "id":  "multi_agent_api_integration",
+        "name":  "Multi-Agent External API Integration",
+        "category":  "multi_agent",
+        "type":  "api_integration",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  130,
+        "retry_count":  2,
+        "description":  "Multiple agents coordinate to integrate with external APIs",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "qa_agent"
+                   ],
+        "workflow":  "api_integration",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Configure external API connections",
+                        "Execute codegen_agent task: generate API integration code",
+                        "Execute test_agent task: test API endpoints",
+                        "Execute qa_agent task: validate API usage patterns",
+                        "Verify external API coordination"
+                    ],
+        "pass_criteria":  [
+                              "API connections established",
+                              "Integration code generated",
+                              "API tests passed",
+                              "Usage patterns validated"
+                          ],
+        "fail_criteria":  [
+                              "API connection failures",
+                              "Integration errors",
+                              "API test failures"
+                          ]
+    },
+    {
+        "id":  "multi_agent_failure_isolation",
+        "name":  "Multi-Agent Failure Isolation and Containment",
+        "category":  "multi_agent",
+        "type":  "fault_isolation",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  100,
+        "retry_count":  2,
+        "description":  "Test that agent failures are isolated and don\u0027t cascade to other agents",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "qa_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "failure_isolation",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute multiple agents in parallel",
+                        "Inject failure into one agent",
+                        "Verify failure isolation",
+                        "Validate other agents continue normally",
+                        "Test failure recovery mechanisms"
+                    ],
+        "pass_criteria":  [
+                              "Failure properly isolated",
+                              "Other agents unaffected",
+                              "System remains stable",
+                              "Recovery mechanisms activated"
+                          ],
+        "fail_criteria":  [
+                              "Failure cascades to other agents",
+                              "System-wide instability",
+                              "Recovery mechanisms fail"
+                          ]
+    },
+    {
+        "id":  "multi_agent_gdrive_integration",
+        "name":  "Multi-Agent Google Drive Integration",
+        "category":  "multi_agent",
+        "type":  "external_integration",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  150,
+        "retry_count":  2,
+        "description":  "Agents collaborate to read, process, and write files to Google Drive",
+        "agents":  [
+                       "doc_agent",
+                       "codegen_agent",
+                       "qa_agent"
+                   ],
+        "workflow":  "gdrive_pipeline",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Configure Google Drive integration",
+                        "Execute doc_agent task: read specs from GDrive",
+                        "Execute codegen_agent task: generate code based on specs",
+                        "Execute qa_agent task: validate and create report",
+                        "Write results back to Google Drive"
+                    ],
+        "pass_criteria":  [
+                              "Google Drive connection established",
+                              "Files read successfully",
+                              "Code generated from Drive specs",
+                              "Results written back to Drive"
+                          ],
+        "fail_criteria":  [
+                              "Google Drive authentication failure",
+                              "File access errors",
+                              "Integration timeout"
+                          ]
+    },
+    {
+        "id":  "multi_agent_load_balancing",
+        "name":  "Multi-Agent Load Balancing and Resource Distribution",
+        "category":  "multi_agent",
+        "type":  "load_balancing",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  150,
+        "retry_count":  2,
+        "description":  "Test load balancing across multiple instances of the same agent type",
+        "agents":  [
+                       "codegen_agent",
+                       "codegen_agent",
+                       "codegen_agent",
+                       "test_agent"
+                   ],
+        "workflow":  "load_balanced",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Configure load balancing for codegen agents",
+                        "Submit multiple codegen tasks simultaneously",
+                        "Monitor task distribution across agent instances",
+                        "Execute test_agent task: validate all outputs",
+                        "Verify load balancing effectiveness"
+                    ],
+        "pass_criteria":  [
+                              "Tasks distributed evenly",
+                              "All agent instances utilized",
+                              "Load balancing effective",
+                              "All outputs validated successfully"
+                          ],
+        "fail_criteria":  [
+                              "Uneven load distribution",
+                              "Agent instance idle",
+                              "Load balancing failure"
+                          ]
+    },
+    {
+        "id":  "multi_agent_performance_monitoring",
+        "name":  "Multi-Agent Performance Monitoring and Optimization",
+        "category":  "multi_agent",
+        "type":  "performance_test",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  120,
+        "retry_count":  2,
+        "description":  "Monitor and optimize performance across multiple coordinated agents",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "qa_agent",
+                       "fix_agent"
+                   ],
+        "workflow":  "performance_monitored",
+        "actions":  [
+                        "Start backend with performance monitoring",
+                        "Connect WebSocket",
+                        "Execute coordinated agent tasks with metrics collection",
+                        "Monitor CPU, memory, and response times",
+                        "Analyze agent performance bottlenecks",
+                        "Apply performance optimizations",
+                        "Validate performance improvements"
+                    ],
+        "pass_criteria":  [
+                              "Performance metrics collected",
+                              "Bottlenecks identified",
+                              "Optimizations applied successfully",
+                              "Performance improvements measured"
+                          ],
+        "fail_criteria":  [
+                              "Performance degradation detected",
+                              "Monitoring system failure",
+                              "Optimization attempts failed"
+                          ]
+    },
+    {
+        "id":  "multi_agent_websocket_streaming",
+        "name":  "Multi-Agent WebSocket Streaming Coordination",
+        "category":  "multi_agent",
+        "type":  "streaming_test",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  120,
+        "retry_count":  2,
+        "description":  "Multiple agents stream results in coordinated fashion via WebSocket",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "streaming_coordination",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket with streaming enabled",
+                        "Execute codegen_agent task: stream code generation",
+                        "Execute test_agent task: stream test results",
+                        "Execute doc_agent task: stream documentation",
+                        "Validate streaming coordination and synchronization"
+                    ],
+        "pass_criteria":  [
+                              "All agents stream successfully",
+                              "Streaming coordination maintained",
+                              "No stream conflicts or corruption",
+                              "Real-time updates received"
+                          ],
+        "fail_criteria":  [
+                              "Stream corruption detected",
+                              "Streaming coordination failure",
+                              "WebSocket connection drops"
+                          ]
+    },
+    {
+        "id":  "multi_agent_parallel_codegen",
+        "name":  "Parallel Multi-Agent Code Generation",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  90,
+        "retry_count":  2,
+        "description":  "Multiple codegen agents work in parallel on different modules",
+        "agents":  [
+                       "codegen_agent",
+                       "codegen_agent",
+                       "codegen_agent"
+                   ],
+        "workflow":  "parallel",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute codegen_agent task: create frontend component",
+                        "Execute codegen_agent task: create backend API",
+                        "Execute codegen_agent task: create database schema",
+                        "Synchronize parallel results"
+                    ],
+        "pass_criteria":  [
+                              "All modules generated successfully",
+                              "Parallel execution completed",
+                              "No resource conflicts",
+                              "Results synchronized properly"
+                          ],
+        "fail_criteria":  [
+                              "Resource conflict detected",
+                              "Parallel execution deadlock",
+                              "Synchronization failure"
+                          ]
+    },
+    {
+        "id":  "rule_engine_edge_cases",
+        "name":  "Rule Engine - Edge Cases",
+        "category":  "rule_engine",
+        "type":  "rule_engine_test",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  80,
+        "retry_count":  1
+    },
+    {
+        "id":  "ws_spam_messages",
+        "name":  "WebSocket Spam Messages",
+        "category":  "connectivity",
+        "type":  "websocket_test",
+        "enabled":  true,
+        "priority":  4,
+        "timeout":  75,
+        "retry_count":  1
+    },
+    {
+        "id":  "multi_agent_full_pipeline",
+        "name":  "Complete Multi-Agent Development Pipeline",
+        "category":  "multi_agent",
+        "type":  "multi_agent_workflow",
+        "enabled":  true,
+        "priority":  5,
+        "timeout":  300,
+        "retry_count":  1,
+        "description":  "Full development cycle with all agents: plan, code, test, fix, document",
+        "agents":  [
+                       "planner_agent",
+                       "codegen_agent",
+                       "test_agent",
+                       "fix_agent",
+                       "qa_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "pipeline",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute planner_agent task: create project roadmap",
+                        "Execute codegen_agent task: implement core features",
+                        "Execute test_agent task: create comprehensive tests",
+                        "Execute fix_agent task: optimize and refactor",
+                        "Execute qa_agent task: validate all components",
+                        "Execute doc_agent task: generate final documentation",
+                        "Validate complete pipeline"
+                    ],
+        "pass_criteria":  [
+                              "All pipeline stages completed",
+                              "Code quality meets standards",
+                              "Tests pass completely",
+                              "Documentation is comprehensive",
+                              "Agent handoffs successful"
+                          ],
+        "fail_criteria":  [
+                              "Pipeline stage failure",
+                              "Agent handoff failure",
+                              "Quality gates not met"
+                          ]
+    },
+    {
+        "id":  "multi_agent_concurrent_stress",
+        "name":  "Multi-Agent Concurrent Stress Testing",
+        "category":  "multi_agent",
+        "type":  "stress_test",
+        "enabled":  true,
+        "priority":  5,
+        "timeout":  180,
+        "retry_count":  1,
+        "description":  "High concurrency multi-agent execution under stress",
+        "agents":  [
+                       "codegen_agent",
+                       "test_agent",
+                       "fix_agent",
+                       "qa_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "concurrent_stress",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Launch 10 concurrent agent tasks",
+                        "Execute rapid-fire agent requests",
+                        "Monitor system resource usage",
+                        "Validate all tasks complete",
+                        "Check for resource leaks"
+                    ],
+        "pass_criteria":  [
+                              "All concurrent tasks completed",
+                              "No resource leaks detected",
+                              "System remains responsive",
+                              "Agent coordination maintained"
+                          ],
+        "fail_criteria":  [
+                              "System resource exhaustion",
+                              "Agent coordination breakdown",
+                              "Memory leaks detected",
+                              "Response timeout exceeded"
+                          ]
+    },
+    {
+        "id":  "multi_agent_microservices",
+        "name":  "Multi-Agent Microservices Orchestration",
+        "category":  "multi_agent",
+        "type":  "microservices",
+        "enabled":  true,
+        "priority":  5,
+        "timeout":  200,
+        "retry_count":  1,
+        "description":  "Agents coordinate to simulate and manage microservices architecture",
+        "agents":  [
+                       "planner_agent",
+                       "codegen_agent",
+                       "test_agent",
+                       "qa_agent",
+                       "doc_agent"
+                   ],
+        "workflow":  "microservices_orchestration",
+        "actions":  [
+                        "Start backend",
+                        "Connect WebSocket",
+                        "Execute planner_agent task: design microservices architecture",
+                        "Execute codegen_agent task: generate service implementations",
+                        "Execute test_agent task: create inter-service tests",
+                        "Execute qa_agent task: validate service contracts",
+                        "Execute doc_agent task: document service APIs",
+                        "Coordinate microservices deployment simulation"
+                    ],
+        "pass_criteria":  [
+                              "Architecture designed successfully",
+                              "All services generated",
+                              "Inter-service tests pass",
+                              "Service contracts validated",
+                              "API documentation complete"
+                          ],
+        "fail_criteria":  [
+                              "Architecture design flaws",
+                              "Service generation failures",
+                              "Inter-service communication errors"
+                          ]
+    },
+    {
+        "id":  "multi_agent_security_validation",
+        "name":  "Multi-Agent Security Validation and Compliance",
+        "category":  "multi_agent",
+        "type":  "security_test",
+        "enabled":  true,
+        "priority":  5,
+        "timeout":  120,
+        "retry_count":  1,
+        "description":  "Multiple agents validate security aspects of generated code and processes",
+        "agents":  [
+                       "codegen_agent",
+                       "qa_agent",
+                       "fix_agent"
+                   ],
+        "workflow":  "security_validation",
+        "actions":  [
+                        "Start backend with security policies enabled",
+                        "Connect WebSocket",
+                        "Execute codegen_agent task: generate code with security considerations",
+                        "Execute qa_agent task: perform security audit",
+                        "Execute fix_agent task: apply security fixes",
+                        "Validate security compliance across all agents"
+                    ],
+        "pass_criteria":  [
+                              "Security audit passed",
+                              "Security fixes applied",
+                              "Compliance validated",
+                              "No security violations detected"
+                          ],
+        "fail_criteria":  [
+                              "Security vulnerabilities found",
+                              "Compliance violations",
+                              "Security fix failures"
+                          ]
+    }
 ]

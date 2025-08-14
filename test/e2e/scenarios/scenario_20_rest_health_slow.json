@@ -1,0 +1,10 @@
+{
+  "id": "rest_health_slow",
+  "name": "REST Health - Slow Startup Allowance",
+  "category": "connectivity",
+  "type": "rest_health_test",
+  "enabled": true,
+  "priority": 2,
+  "timeout": 45,
+  "retry_count": 2
+}

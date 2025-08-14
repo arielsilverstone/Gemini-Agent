@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_error_handling",
+  "name": "Agent Execution - Error Handling",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate code that intentionally raises and catches an exception",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 150,
+  "retry_count": 1
+}

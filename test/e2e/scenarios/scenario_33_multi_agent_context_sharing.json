@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_context_sharing",
+  "name": "Multi-Agent Context and State Sharing",
+  "category": "multi_agent",
+  "type": "context_management",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 90,
+  "retry_count": 2,
+  "description": "Test context sharing and state synchronization between agents",
+  "agents": ["planner_agent", "codegen_agent", "qa_agent"],
+  "workflow": "context_aware",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute planner_agent task: create shared context",
+    "Execute codegen_agent task: use shared context for generation",
+    "Execute qa_agent task: validate using same context",
+    "Verify context consistency across agents"
+  ],
+  "pass_criteria": [
+    "Context shared successfully",
+    "State synchronization maintained",
+    "Context consistency verified",
+    "Agent coordination based on shared state"
+  ],
+  "fail_criteria": [
+    "Context sharing failure",
+    "State synchronization lost",
+    "Context inconsistency detected"
+  ]
+}

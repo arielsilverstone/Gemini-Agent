@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_websocket_streaming",
+  "name": "Multi-Agent WebSocket Streaming Coordination",
+  "category": "multi_agent",
+  "type": "streaming_test",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 120,
+  "retry_count": 2,
+  "description": "Multiple agents stream results in coordinated fashion via WebSocket",
+  "agents": ["codegen_agent", "test_agent", "doc_agent"],
+  "workflow": "streaming_coordination",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket with streaming enabled",
+    "Execute codegen_agent task: stream code generation",
+    "Execute test_agent task: stream test results",
+    "Execute doc_agent task: stream documentation",
+    "Validate streaming coordination and synchronization"
+  ],
+  "pass_criteria": [
+    "All agents stream successfully",
+    "Streaming coordination maintained",
+    "No stream conflicts or corruption",
+    "Real-time updates received"
+  ],
+  "fail_criteria": [
+    "Stream corruption detected",
+    "Streaming coordination failure",
+    "WebSocket connection drops"
+  ]
+}

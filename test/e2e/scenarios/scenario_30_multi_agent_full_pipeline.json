@@ -1,0 +1,37 @@
+
+{
+  "id": "multi_agent_full_pipeline",
+  "name": "Complete Multi-Agent Development Pipeline",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 5,
+  "timeout": 300,
+  "retry_count": 1,
+  "description": "Full development cycle with all agents: plan, code, test, fix, document",
+  "agents": ["planner_agent", "codegen_agent", "test_agent", "fix_agent", "qa_agent", "doc_agent"],
+  "workflow": "pipeline",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute planner_agent task: create project roadmap",
+    "Execute codegen_agent task: implement core features",
+    "Execute test_agent task: create comprehensive tests",
+    "Execute fix_agent task: optimize and refactor",
+    "Execute qa_agent task: validate all components",
+    "Execute doc_agent task: generate final documentation",
+    "Validate complete pipeline"
+  ],
+  "pass_criteria": [
+    "All pipeline stages completed",
+    "Code quality meets standards",
+    "Tests pass completely",
+    "Documentation is comprehensive",
+    "Agent handoffs successful"
+  ],
+  "fail_criteria": [
+    "Pipeline stage failure",
+    "Agent handoff failure",
+    "Quality gates not met"
+  ]
+}

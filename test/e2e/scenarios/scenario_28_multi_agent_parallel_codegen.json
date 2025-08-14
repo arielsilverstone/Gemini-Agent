@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_parallel_codegen",
+  "name": "Parallel Multi-Agent Code Generation",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 90,
+  "retry_count": 2,
+  "description": "Multiple codegen agents work in parallel on different modules",
+  "agents": ["codegen_agent", "codegen_agent", "codegen_agent"],
+  "workflow": "parallel",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute codegen_agent task: create frontend component",
+    "Execute codegen_agent task: create backend API",
+    "Execute codegen_agent task: create database schema",
+    "Synchronize parallel results"
+  ],
+  "pass_criteria": [
+    "All modules generated successfully",
+    "Parallel execution completed",
+    "No resource conflicts",
+    "Results synchronized properly"
+  ],
+  "fail_criteria": [
+    "Resource conflict detected",
+    "Parallel execution deadlock",
+    "Synchronization failure"
+  ]
+}

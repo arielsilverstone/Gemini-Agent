@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_codegen_qa_doc",
+  "name": "Multi-Agent Code-QA-Documentation Pipeline",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 150,
+  "retry_count": 2,
+  "description": "Codegen creates code, QA validates, Doc agent documents",
+  "agents": ["codegen_agent", "qa_agent", "doc_agent"],
+  "workflow": "sequential",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute codegen_agent task: create data processing module",
+    "Execute qa_agent task: validate code quality and standards",
+    "Execute doc_agent task: generate comprehensive documentation",
+    "Validate pipeline completion"
+  ],
+  "pass_criteria": [
+    "Code generated successfully",
+    "QA validation passed",
+    "Documentation created",
+    "All agents coordinated properly"
+  ],
+  "fail_criteria": [
+    "QA validation failed",
+    "Documentation generation failed",
+    "Agent coordination timeout"
+  ]
+}

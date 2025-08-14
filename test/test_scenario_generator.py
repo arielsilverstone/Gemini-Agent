@@ -16,31 +16,35 @@ import websockets
 import requests
 import subprocess
 import time
+
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Callable, Tuple
 from dataclasses import dataclass
 from loguru import logger
-
-
 #
 # ============================================================================
 # SECTION 2: Test Action Mapping & Execution Primitives
 # ============================================================================
+# Class 2.1: ActionMapping
+# Purpose: Maps JSON action strings to executable functions.
+# ============================================================================
 #
 @dataclass
 class ActionMapping:
-    """Maps JSON action strings to executable functions."""
 
     pattern: str
     function: Callable
     parameters: Dict[str, Any]
     timeout: Optional[int] = None
     retry_count: int = 1
-
-
+#
+# ============================================================================
+# Class 2.2: TestExecutionPrimitives
+# Purpose: Core test execution operations mapped from JSON actions.
+# ============================================================================
+#
 class TestExecutionPrimitives:
-    """Core test execution operations mapped from JSON actions."""
 
     def __init__(self, project_root: Path):
         self.project_root = project_root
@@ -52,12 +56,15 @@ class TestExecutionPrimitives:
     # ------------------------------------------------------------------------
     # PRIMITIVE: Backend System Operations
     # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Method 2.2.1: start_backend
+    # Purpose: Starts the backend server process. Maps JSON actions:
+    #          "Start backend", "Launch backend server"
+    # ========================================================================
+    #
     async def start_backend(self, timeout: int = 60) -> Tuple[bool, str]:
-        """
-        Starts the backend server process.
-        Maps JSON actions: "Start backend", "Launch backend server"
-        """
+
         try:
             backend_script = self.project_root / "src" / "backend_server.py"
             if not backend_script.exists():
@@ -92,9 +99,15 @@ class TestExecutionPrimitives:
 
         except Exception as e:
             return False, f"Backend startup error: {e}"
-
+    #
+    # ========================================================================
+    # Async Method 2.2.2: stop_backend
+    # Purpose: Stops the backend server process. Maps JSON action:
+    #          "Stop backend", "Terminate backend server"
+    # ========================================================================
+    #
     async def stop_backend(self) -> Tuple[bool, str]:
-        """Stops the backend server process."""
+
         try:
             if self.backend_process:
                 self.backend_process.terminate()
@@ -106,16 +119,15 @@ class TestExecutionPrimitives:
             return True, "Backend was not running"
         except Exception as e:
             return False, f"Backend stop error: {e}"
-
-    # ------------------------------------------------------------------------
-    # PRIMITIVE: Frontend System Operations
-    # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Async Method 2.2.3: start_frontend
+    # Purpose: Starts the frontend application. Maps JSON action:
+    #          "Start frontend", "Launch frontend application"
+    # ========================================================================
+    #
     async def start_frontend(self, timeout: int = 30) -> Tuple[bool, str]:
-        """
-        Starts the frontend application.
-        Maps JSON actions: "Start frontend", "Launch frontend application"
-        """
+
         try:
             frontend_html = self.project_root / "frontend" / "index.html"
             if not frontend_html.exists():
@@ -125,19 +137,32 @@ class TestExecutionPrimitives:
             # In real implementation, this might launch Electron or serve HTML
             self.frontend_process = True  # Placeholder for actual process
             return True, "Frontend started successfully"
-
         except Exception as e:
             return False, f"Frontend startup error: {e}"
-
-    # ------------------------------------------------------------------------
-    # PRIMITIVE: WebSocket Operations
-    # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Async Method 2.2.4: stop_frontend
+    # Purpose: Stops the frontend application. Maps JSON action:
+    #          "Stop frontend", "Terminate frontend application"
+    # ========================================================================
+    #
+    async def stop_frontend(self) -> Tuple[bool, str]:
+        try:
+            if self.frontend_process:
+                self.frontend_process = None
+                return True, "Frontend stopped successfully"
+            return True, "Frontend was not running"
+        except Exception as e:
+            return False, f"Frontend stop error: {e}"
+    #
+    # ========================================================================
+    # Async Method 2.2.5: connect_websocket
+    # Purpose: Establishes WebSocket connection to backend. Maps JSON action:
+    #          "Connect WebSocket", "Establish WebSocket connection"
+    # ========================================================================
+    #
     async def connect_websocket(self, timeout: int = 10) -> Tuple[bool, str]:
-        """
-        Establishes WebSocket connection to backend.
-        Maps JSON actions: "Connect WebSocket", "Establish WebSocket connection"
-        """
+
         try:
             ws_uri = f"ws://localhost:{self.test_port}/ws"
             self.websocket_connection = await asyncio.wait_for(
@@ -149,14 +174,16 @@ class TestExecutionPrimitives:
             return False, f"WebSocket connection timeout after {timeout}s"
         except Exception as e:
             return False, f"WebSocket connection error: {e}"
-
+    #
+    # ========================================================================
+    # Async Method 2.2.6: send_websocket_message
+    # Purpose: Sends message via WebSocket and waits for response. Maps JSON action:
+    #          "Send WebSocket message", "Send agent task"
+    # ========================================================================
+    #
     async def send_websocket_message(
         self, message: Dict[str, Any], timeout: int = 5
     ) -> Tuple[bool, str]:
-        """
-        Sends message via WebSocket and waits for response.
-        Maps JSON actions: "Send WebSocket message", "Send agent task"
-        """
         try:
             if not self.websocket_connection:
                 return False, "WebSocket not connected"
@@ -175,18 +202,16 @@ class TestExecutionPrimitives:
             return False, f"WebSocket message timeout after {timeout}s"
         except Exception as e:
             return False, f"WebSocket message error: {e}"
-
-    # ------------------------------------------------------------------------
-    # PRIMITIVE: Agent Operations
-    # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Async Method 2.2.7: execute_agent_task
+    # Purpose: Executes a task using specified agent. Maps JSON action:
+    #          "Execute [agent] task", "Run [agent] with [task]"
+    # ========================================================================
+    #
     async def execute_agent_task(
         self, agent_name: str, task: str, timeout: int = 120
     ) -> Tuple[bool, str]:
-        """
-        Executes a task using specified agent.
-        Maps JSON actions: "Execute [agent] task", "Run [agent] with [task]"
-        """
         try:
             message = {
                 "type": "AGENT_TASK",
@@ -203,16 +228,15 @@ class TestExecutionPrimitives:
 
         except Exception as e:
             return False, f"Agent execution error: {e}"
-
-    # ------------------------------------------------------------------------
-    # PRIMITIVE: Configuration Operations
-    # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Async Method 2.2.8: load_configuration
+    # Purpose: Loads specified configuration file. Maps JSON action:
+    #          "Load config", "Load [config_type] configuration"
+    # ========================================================================
+    #
     async def load_configuration(self, config_type: str) -> Tuple[bool, str]:
-        """
-        Loads specified configuration file.
-        Maps JSON actions: "Load config", "Load [config_type] configuration"
-        """
+
         try:
             config_files = {
                 "rules": "rules.example.yaml",
@@ -235,18 +259,16 @@ class TestExecutionPrimitives:
 
         except Exception as e:
             return False, f"Configuration loading error: {e}"
-
-    # ------------------------------------------------------------------------
-    # PRIMITIVE: API Operations
-    # ------------------------------------------------------------------------
-
+    #
+    # ========================================================================
+    # Async Method 2.2.9: test_api_endpoint
+    # Purpose: Tests API endpoint functionality. Maps JSON actions:
+    #          "GET /api/[endpoint]", "POST to settings API"
+    # ========================================================================
+    #
     async def test_api_endpoint(
-        self, endpoint: str, method: str = "GET", data: Dict = None, timeout: int = 15
+        self, endpoint: str, method: str = "GET", data: Optional[Dict] = None, timeout: int = 15
     ) -> Tuple[bool, str]:
-        """
-        Tests API endpoint functionality.
-        Maps JSON actions: "GET /api/[endpoint]", "POST to settings API"
-        """
         try:
             url = f"http://localhost:{self.test_port}/api/{endpoint.lstrip('/')}"
 
@@ -266,11 +288,13 @@ class TestExecutionPrimitives:
             return False, f"API {method} {endpoint}: Timeout after {timeout}s"
         except Exception as e:
             return False, f"API {method} {endpoint}: Error - {e}"
-
-
 #
 # ============================================================================
 # SECTION 3: Dynamic Test Generator Engine
+# ============================================================================
+# Class 3.1: TestScenarioGenerator
+# Purpose: Generates executable test functions from JSON scenario
+#          specifications.
 # ============================================================================
 #
 class TestScenarioGenerator:

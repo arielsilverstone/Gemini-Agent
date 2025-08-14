@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_performance_monitoring",
+  "name": "Multi-Agent Performance Monitoring and Optimization",
+  "category": "multi_agent",
+  "type": "performance_test",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 120,
+  "retry_count": 2,
+  "description": "Monitor and optimize performance across multiple coordinated agents",
+  "agents": ["codegen_agent", "test_agent", "qa_agent", "fix_agent"],
+  "workflow": "performance_monitored",
+  "actions": [
+    "Start backend with performance monitoring",
+    "Connect WebSocket",
+    "Execute coordinated agent tasks with metrics collection",
+    "Monitor CPU, memory, and response times",
+    "Analyze agent performance bottlenecks",
+    "Apply performance optimizations",
+    "Validate performance improvements"
+  ],
+  "pass_criteria": [
+    "Performance metrics collected",
+    "Bottlenecks identified",
+    "Optimizations applied successfully",
+    "Performance improvements measured"
+  ],
+  "fail_criteria": [
+    "Performance degradation detected",
+    "Monitoring system failure",
+    "Optimization attempts failed"
+  ]
+}

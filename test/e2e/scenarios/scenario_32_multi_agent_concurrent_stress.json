@@ -1,0 +1,35 @@
+
+{
+  "id": "multi_agent_concurrent_stress",
+  "name": "Multi-Agent Concurrent Stress Testing",
+  "category": "multi_agent",
+  "type": "stress_test",
+  "enabled": true,
+  "priority": 5,
+  "timeout": 180,
+  "retry_count": 1,
+  "description": "High concurrency multi-agent execution under stress",
+  "agents": ["codegen_agent", "test_agent", "fix_agent", "qa_agent", "doc_agent"],
+  "workflow": "concurrent_stress",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Launch 10 concurrent agent tasks",
+    "Execute rapid-fire agent requests",
+    "Monitor system resource usage",
+    "Validate all tasks complete",
+    "Check for resource leaks"
+  ],
+  "pass_criteria": [
+    "All concurrent tasks completed",
+    "No resource leaks detected",
+    "System remains responsive",
+    "Agent coordination maintained"
+  ],
+  "fail_criteria": [
+    "System resource exhaustion",
+    "Agent coordination breakdown",
+    "Memory leaks detected",
+    "Response timeout exceeded"
+  ]
+}

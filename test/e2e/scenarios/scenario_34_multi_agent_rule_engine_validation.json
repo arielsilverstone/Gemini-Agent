@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_rule_engine_validation",
+  "name": "Multi-Agent Rule Engine Validation",
+  "category": "multi_agent",
+  "type": "rule_validation",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 100,
+  "retry_count": 2,
+  "description": "Multiple agents validate different aspects using rule engine",
+  "agents": ["codegen_agent", "qa_agent", "fix_agent"],
+  "workflow": "rule_based",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Load rule engine configuration",
+    "Execute codegen_agent task: generate code with rule compliance",
+    "Execute qa_agent task: validate against coding rules",
+    "Execute fix_agent task: apply rule-based fixes",
+    "Validate rule compliance across all outputs"
+  ],
+  "pass_criteria": [
+    "All rule validations passed",
+    "Code complies with standards",
+    "Rule engine coordination successful",
+    "Multi-agent rule consistency"
+  ],
+  "fail_criteria": [
+    "Rule validation failures",
+    "Rule engine errors",
+    "Agent rule conflicts"
+  ]
+}

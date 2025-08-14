@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_error_recovery",
+  "name": "Multi-Agent Error Recovery and Resilience",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 120,
+  "retry_count": 3,
+  "description": "Test agent failure recovery and graceful degradation",
+  "agents": ["codegen_agent", "test_agent", "fix_agent"],
+  "workflow": "fault_tolerant",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute codegen_agent task: generate code",
+    "Simulate agent failure during execution",
+    "Trigger error recovery mechanisms",
+    "Continue with remaining agents",
+    "Validate graceful degradation"
+  ],
+  "pass_criteria": [
+    "Error detected and handled",
+    "Recovery mechanisms activated",
+    "Remaining agents continue",
+    "Graceful degradation achieved"
+  ],
+  "fail_criteria": [
+    "Unhandled agent failure",
+    "System-wide crash",
+    "Recovery failure"
+  ]
+}

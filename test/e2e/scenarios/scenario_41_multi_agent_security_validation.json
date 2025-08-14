@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_security_validation",
+  "name": "Multi-Agent Security Validation and Compliance",
+  "category": "multi_agent",
+  "type": "security_test",
+  "enabled": true,
+  "priority": 5,
+  "timeout": 120,
+  "retry_count": 1,
+  "description": "Multiple agents validate security aspects of generated code and processes",
+  "agents": ["codegen_agent", "qa_agent", "fix_agent"],
+  "workflow": "security_validation",
+  "actions": [
+    "Start backend with security policies enabled",
+    "Connect WebSocket",
+    "Execute codegen_agent task: generate code with security considerations",
+    "Execute qa_agent task: perform security audit",
+    "Execute fix_agent task: apply security fixes",
+    "Validate security compliance across all agents"
+  ],
+  "pass_criteria": [
+    "Security audit passed",
+    "Security fixes applied",
+    "Compliance validated",
+    "No security violations detected"
+  ],
+  "fail_criteria": [
+    "Security vulnerabilities found",
+    "Compliance violations",
+    "Security fix failures"
+  ]
+}

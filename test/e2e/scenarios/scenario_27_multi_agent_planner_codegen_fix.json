@@ -1,0 +1,33 @@
+
+{
+  "id": "multi_agent_planner_codegen_fix",
+  "name": "Multi-Agent Planning, Generation, and Fixing",
+  "category": "multi_agent",
+  "type": "multi_agent_workflow",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 180,
+  "retry_count": 2,
+  "description": "Planner designs, codegen implements, fix agent refines",
+  "agents": ["planner_agent", "codegen_agent", "fix_agent"],
+  "workflow": "sequential",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Execute planner_agent task: design API structure",
+    "Execute codegen_agent task: implement planned API",
+    "Execute fix_agent task: refactor and optimize code",
+    "Validate complete workflow"
+  ],
+  "pass_criteria": [
+    "Planning completed successfully",
+    "Code implementation matches plan",
+    "Code optimization applied",
+    "Workflow coordination successful"
+  ],
+  "fail_criteria": [
+    "Planning phase failed",
+    "Implementation mismatch",
+    "Optimization failed"
+  ]
+}

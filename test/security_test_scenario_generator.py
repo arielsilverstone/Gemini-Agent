@@ -17,10 +17,7 @@ from typing import Dict, List, Any, Optional
 from loguru import logger
 
 # Import security manager for validation
-import sys
-
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-from security_manager import SecurityLevel, AuthenticationMethod
+from src.security_manager import SecurityLevel, AuthenticationMethod
 
 
 #
@@ -36,7 +33,7 @@ class SecurityTestScenarioGenerator:
     - WebSocket security protocols
     """
 
-    def __init__(self, output_dir: Path = None):
+    def __init__(self, output_dir: Optional[Path] = None):
         self.output_dir = output_dir or Path(__file__).parent
         self.scenarios = []
 

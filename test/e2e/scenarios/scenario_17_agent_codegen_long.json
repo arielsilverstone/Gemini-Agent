@@ -1,0 +1,12 @@
+{
+  "id": "agent_codegen_long",
+  "name": "Agent Execution - Codegen Longer Task",
+  "category": "agent_execution",
+  "type": "agent_test",
+  "agent_name": "codegen_agent",
+  "task": "Generate a small module with two functions and unit tests",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 180,
+  "retry_count": 1
+}

@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_version_control",
+  "name": "Multi-Agent Version Control Integration",
+  "category": "multi_agent",
+  "type": "version_control",
+  "enabled": true,
+  "priority": 3,
+  "timeout": 120,
+  "retry_count": 2,
+  "description": "Agents coordinate to manage version control operations",
+  "agents": ["codegen_agent", "doc_agent", "qa_agent"],
+  "workflow": "version_controlled",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Initialize version control workspace",
+    "Execute codegen_agent task: generate and commit code",
+    "Execute doc_agent task: generate and commit documentation",
+    "Execute qa_agent task: validate and create review",
+    "Coordinate version control operations"
+  ],
+  "pass_criteria": [
+    "Version control initialized",
+    "All commits successful",
+    "Agent coordination maintained",
+    "Repository state consistent"
+  ],
+  "fail_criteria": [
+    "Version control conflicts",
+    "Commit failures",
+    "Repository corruption"
+  ]
+}

@@ -1,0 +1,34 @@
+
+{
+  "id": "multi_agent_api_integration",
+  "name": "Multi-Agent External API Integration",
+  "category": "multi_agent",
+  "type": "api_integration",
+  "enabled": true,
+  "priority": 4,
+  "timeout": 130,
+  "retry_count": 2,
+  "description": "Multiple agents coordinate to integrate with external APIs",
+  "agents": ["codegen_agent", "test_agent", "qa_agent"],
+  "workflow": "api_integration",
+  "actions": [
+    "Start backend",
+    "Connect WebSocket",
+    "Configure external API connections",
+    "Execute codegen_agent task: generate API integration code",
+    "Execute test_agent task: test API endpoints",
+    "Execute qa_agent task: validate API usage patterns",
+    "Verify external API coordination"
+  ],
+  "pass_criteria": [
+    "API connections established",
+    "Integration code generated",
+    "API tests passed",
+    "Usage patterns validated"
+  ],
+  "fail_criteria": [
+    "API connection failures",
+    "Integration errors",
+    "API test failures"
+  ]
+}
