@@ -9,7 +9,7 @@
 import asyncio
 import logging
 import json
-from typing import Dict, Any, List, Optional, AsyncIterator
+from typing import Dict, Any, List, Optional, AsyncIterator, AsyncGenerator, cast
 
 from src.config_manager import ConfigManager
 from src.rule_engine import RuleEngine
@@ -113,11 +113,13 @@ class Orchestrator:
 
         await self.websocket_manager.send_message_to_client("[INFO] Workflow execution complete.")
 
-    async def _execute_task(self, agent: AgentBase, task: str) -> AsyncIterator[str]:
+    async def _execute_task(self, agent: AgentBase, task: str) -> AsyncGenerator[str, None]:
         """Executes a single agent task and yields its output chunks."""
         try:
-            async for chunk in await agent.run(task, self.context):
-                yield chunk
+            run_result = await agent.run(task, self.context)
+            run_result = cast(AsyncIterator[str], run_result)
+            async for chunk in run_result:
+                yield str(chunk)
         except Exception as e:
             error_message = f"[ERROR] Unhandled exception in agent '{agent.name}': {e}"
             logging.error(error_message, exc_info=True)
@@ -138,9 +140,11 @@ class Orchestrator:
 
         logging.info(f"Executing IPC task for agent '{agent_type}': {task}")
         try:
+            run_result = await agent.run(task, self.context)
+            run_result = cast(AsyncIterator[str], run_result)
             output_chunks = []
-            async for chunk in await agent.run(task, self.context):
-                output_chunks.append(chunk)
+            async for chunk in run_result:
+                output_chunks.append(str(chunk))
             final_output = "".join([c for c in output_chunks if not c.startswith("STREAM_CHUNK:")])
             return final_output
         except Exception as e:
