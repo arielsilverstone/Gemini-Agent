@@ -102,3 +102,71 @@ If a gate fails, force a revise cycle and store failure reasons in `verification
 - Encryption at rest for source and run artifacts.
 - Matter-based access control lists.
 - Immutable run logs for auditability.
+
+## 9) Beginner guide: download, PRs, and basic commands
+If you're new to Git/Codex workflows, use this as a plain-English guide.
+
+### A) How to "download" these changes to your machine
+If this repository is on GitHub:
+1. Open the repository page in a browser.
+2. Click **Code** -> copy the HTTPS URL.
+3. In terminal:
+   ```bash
+   git clone <repo-url>
+   cd Gemini-Agent
+   ```
+
+If you already cloned it before, update it:
+```bash
+git pull
+```
+
+### B) What a PR is
+A **PR** means **Pull Request**. It's a review page that shows:
+- what files changed,
+- exactly what lines were added/removed,
+- and discussion/comments before merging.
+
+Think of it as "please review these proposed changes" before they become part of main code.
+
+### C) How to use this blueprint in practice (first run)
+1. Copy your patent source files into `data/raw/`.
+2. Run your ingest/index script to populate `data/processed/` and `index/`.
+3. Choose a task (for example: OA response draft).
+4. Run Codex with the prompt stack in section 4.
+5. Save output and verifier report under a new `runs/<timestamp>/` folder.
+6. Manually review before any external sharing or filing.
+
+### D) What `sed` is
+`sed` is a command-line text tool used to print or edit text streams/files.
+
+Common example used in reviews:
+```bash
+sed -n '1,120p' some_file.md
+```
+That means: print lines 1 through 120 only.
+
+If you prefer simpler commands, you can use:
+```bash
+cat some_file.md
+```
+or open files in a text editor instead of using `sed`.
+
+### E) Minimal command cheat sheet
+```bash
+# show changed files
+git status
+
+# show recent commits
+git log --oneline -n 5
+
+# fetch latest updates
+git pull
+
+# create a new branch
+git checkout -b my-update
+
+# stage and commit your edits
+git add <file1> <file2>
+git commit -m "Describe what changed"
+```
