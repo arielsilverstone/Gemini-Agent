@@ -1,0 +1,19 @@
+You are the verification stage.
+
+Given the generated draft and retrieved sources, produce a pass/fail report with:
+1) Citation completeness score (0-100)
+2) Unsupported statements list
+3) Terminology consistency issues
+4) Claim/support mismatches (if claims exist)
+5) Risk flags:
+   - hallucination risk
+   - unsupported breadth risk
+   - ambiguity risk
+6) Final verdict: PASS | REVISE | BLOCK
+
+Rules:
+- PASS only if no critical unsupported statements exist.
+- REVISE for fixable issues.
+- BLOCK if evidence is fundamentally missing or contradictory.
+
+Output strictly as JSON.
