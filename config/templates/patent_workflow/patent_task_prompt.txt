@@ -1,0 +1,23 @@
+Task: Produce a patent workflow deliverable.
+
+Inputs:
+- Matter context
+- Retrieved sources (with source ids)
+- Requested deliverable type: {deliverable_type}
+
+Workflow:
+1) Summarize invention and novelty hypotheses.
+2) Draft deliverable in requested format.
+3) For each substantive statement, append source ids.
+4) Create a "Support Map" table:
+   - statement/limitation
+   - source ids
+   - confidence (high/med/low)
+5) Create "Open Questions" list for missing evidence.
+
+Output schema (JSON-compatible markdown sections):
+- Metadata
+- Draft
+- Support Map
+- Open Questions
+- Risks

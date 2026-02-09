@@ -5,5 +5,7 @@ This directory contains all the text-based prompt templates used by the AI agent
 * `base_planner_prompt.txt `: Default template for planning tasks.
 * `strict_codegen_prompt.txt `: Example of an overridden template for stricter code generation.
 
+* `patent_workflow/`: Starter prompt bundle for local patent-agent workflows (system, task, verification).
+
 ---
 Created: 05Aug12
