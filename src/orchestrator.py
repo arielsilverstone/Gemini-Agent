@@ -23,6 +23,7 @@ from agents.fix_agent import FixAgent
 from agents.planner_agent import PlannerAgent
 from agents.qa_agent import QaAgent
 from agents.test_agent import TestAgent
+from agents.evidence_verifier_agent import EvidenceVerifierAgent
 
 # ============================================================================
 # SECTION 2: Class Definition - Orchestrator
@@ -60,6 +61,7 @@ class Orchestrator:
             "planner": PlannerAgent,
             "qa": QaAgent,
             "test": TestAgent,
+            "evidence_verifier": EvidenceVerifierAgent,
         }
 
         self.agents.clear()
